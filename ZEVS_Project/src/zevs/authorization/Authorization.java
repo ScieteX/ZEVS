@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
-
 import zevs.authorization.registration.Registration;
 
 import java.awt.event.ActionListener;
@@ -26,7 +24,7 @@ public class Authorization {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 438, 235);
+		frame.setBounds(100, 100, 438, 222);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
