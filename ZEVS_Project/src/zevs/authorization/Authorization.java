@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
+import zevs.ConnectionDB;
 import zevs.authorization.registration.Registration;
 
 import java.awt.event.ActionListener;
@@ -14,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Authorization {
+public class Authorization extends ConnectionDB {
 
 	public JFrame frame;
 	private JTextField textField;
@@ -49,6 +50,15 @@ public class Authorization {
 		frame.getContentPane().add(passwordField);
 		
 		JButton button = new JButton("\u0413\u043E\u0441\u0442\u044C");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					getConnection(login, pass);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		button.setBounds(199, 117, 89, 23);
 		frame.getContentPane().add(button);
 		

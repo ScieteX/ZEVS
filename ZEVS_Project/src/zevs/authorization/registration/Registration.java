@@ -10,12 +10,16 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+
+import zevs.ConnectionDB;
+
 import java.awt.GridLayout;
 
-public class Registration extends JDialog {
+public class Registration  extends JDialog  {
 
 
 	private static final long serialVersionUID = 1L;
@@ -26,7 +30,7 @@ public class Registration extends JDialog {
 	private JTextField textField_3;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
-
+    //private ConnectionDB connectionDB = new ConnectionDB();
 	
 	public Registration() {
 		setAlwaysOnTop(true);
