@@ -73,7 +73,19 @@ public class Authorization extends ConnectionDB {
 		JButton button_1 = new JButton("\u0412\u0445\u043E\u0434");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				try {
+					//System.out.println(checkLoginPass(getConnection(login, pass), "root"));
+					String test = checkLoginPass(getConnection(login, pass), "user",true, true);
+					if(test.endsWith("user"))
+					{
+						System.out.println("yes");
+					}
+					else
+						System.out.println("no");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		button_1.setBounds(100, 117, 89, 23);
