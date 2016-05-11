@@ -22,11 +22,11 @@ public class ConnectionDB
 		{
 			if(pass == true && type == true)
 			ResultReturn = result.getString("Login") + result.getString("Password") + result.getString("Type");
-			
+			else
 			if(pass == true && type == false)
 			ResultReturn = result.getString("Login") + result.getString("Password");
-			
-			if(pass == false && type == true);
+			else
+			if(pass == false && type == true)
 			ResultReturn = result.getString("Login") + result.getString("Type");
 			
 			if(pass == false && type == false)

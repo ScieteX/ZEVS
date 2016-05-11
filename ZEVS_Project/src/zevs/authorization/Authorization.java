@@ -54,17 +54,7 @@ public class Authorization extends ConnectionDB {
 		JButton button = new JButton("\u0413\u043E\u0441\u0442\u044C");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							Workspace window = new Workspace();
-							window.frame.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				frame.dispose();
+				startWorkspace();
 			}
 		});
 		button.setBounds(199, 117, 89, 23);
@@ -74,16 +64,19 @@ public class Authorization extends ConnectionDB {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					//System.out.println(checkLoginPass(getConnection(login, pass), "root"));
-					String test = checkLoginPass(getConnection(login, pass), "user",true, true);
-					if(test.endsWith("user"))
+					String result = checkLoginPass(getConnection(login, pass), textField.getText(),true, true);
+					System.out.println(passwordField.getPassword());
+					if(result == null)
+						return;
+					if(result.equals(textField.getText() + passwordField.getText() + "user"))
 					{
-						System.out.println("yes");
+					startWorkspace();
 					}
-					else
-						System.out.println("no");
+					if(result.equals(textField.getText() + passwordField.getText() + "admin"))
+					{
+					startWorkspace();
+					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -120,5 +113,19 @@ public class Authorization extends ConnectionDB {
 		});
 		button_3.setBounds(335, 167, 89, 23);
 		frame.getContentPane().add(button_3);
+	}
+	protected void startWorkspace()
+	{
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Workspace window = new Workspace();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		frame.dispose();
 	}
 }
