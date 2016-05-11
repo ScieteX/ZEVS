@@ -29,6 +29,7 @@ public class Registration extends JDialog {
 
 	
 	public Registration() {
+		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 382);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

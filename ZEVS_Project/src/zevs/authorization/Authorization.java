@@ -11,6 +11,8 @@ import zevs.authorization.registration.Registration;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Authorization {
 
@@ -23,6 +25,7 @@ public class Authorization {
 	}
 	private void initialize() {
 		frame = new JFrame();
+		frame.setAlwaysOnTop(true);
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 438, 222);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,8 +62,16 @@ public class Authorization {
 				Registration dialog = new Registration();
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
-				
-				//frame.setEnabled(false);
+				dialog.addWindowListener(new WindowAdapter() {
+					public void windowOpened(WindowEvent e)
+					{
+						frame.setEnabled(false);
+					}
+					public void windowClosed(WindowEvent e)
+					{
+						frame.setEnabled(true);
+					}
+				});
 			}
 		});
 		button_2.setBounds(298, 117, 126, 23);
