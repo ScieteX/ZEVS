@@ -9,7 +9,9 @@ import javax.swing.JButton;
 
 import zevs.ConnectionDB;
 import zevs.authorization.registration.Registration;
+import zevs.workspace.Workspace;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -52,17 +54,28 @@ public class Authorization extends ConnectionDB {
 		JButton button = new JButton("\u0413\u043E\u0441\u0442\u044C");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					getConnection(login, pass);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							Workspace window = new Workspace();
+							window.frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				frame.dispose();
 			}
 		});
 		button.setBounds(199, 117, 89, 23);
 		frame.getContentPane().add(button);
 		
 		JButton button_1 = new JButton("\u0412\u0445\u043E\u0434");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		button_1.setBounds(100, 117, 89, 23);
 		frame.getContentPane().add(button_1);
 		
