@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ConnectionDB 
 {
@@ -11,6 +12,20 @@ public class ConnectionDB
 	protected final String login = "ZevsUser";
 	protected final String pass = "1357905ZEVSAC121";
 	protected final String URL = "jdbc:mysql://localhost:3306/zevsdb"; 
+	
+	public void InsertData(Connection connection, String Login, String Password, String Name, String Surname, String Patronymic, String Type)
+	{
+		try {
+			PreparedStatement insert = connection.prepareStatement("INSERT INTO `zevsdb`.`users` (`Login`, `Password`, `Name`, `Surname`, `Patronymic`, `Type`) VALUES ('"+Login+"', '"+Password+"', '"+Name+"', '"+Surname+"', '"+Patronymic+"', '"+Type+"')");
+			insert.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Insert Completed.");
+		}
+	}
 	
 	public String checkLoginPass(Connection connection, String Login, boolean pass, boolean type) throws Exception
 	{
