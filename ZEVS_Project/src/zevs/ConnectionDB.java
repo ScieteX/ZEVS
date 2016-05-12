@@ -9,8 +9,8 @@ import java.sql.SQLException;
 public class ConnectionDB 
 {
 	protected final String driver = "com.mysql.jdbc.Driver";
-	protected final String login = "ZevsUser";
-	protected final String pass = "1357905ZEVSAC121";
+	public final String login = "ZevsUser";
+	public final String pass = "1357905ZEVSAC121";
 	protected final String URL = "jdbc:mysql://localhost:3306/zevsdb"; 
 	
 	public void InsertData(Connection connection, String Login, String Password, String Name, String Surname, String Patronymic, String Type)

@@ -18,6 +18,7 @@ import javax.swing.JPasswordField;
 import zevs.ConnectionDB;
 
 import java.awt.GridLayout;
+import java.sql.Connection;
 
 public class Registration  extends JDialog  {
 
@@ -30,7 +31,8 @@ public class Registration  extends JDialog  {
 	private JTextField textField_3;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
-    //private ConnectionDB connectionDB = new ConnectionDB();
+    private ConnectionDB connectionDB = new ConnectionDB();
+    private final String Type = "user";
 	
 	public Registration() {
 		setAlwaysOnTop(true);
@@ -99,7 +101,19 @@ public class Registration  extends JDialog  {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+					try {
 						
+                        if(connectionDB.checkLoginPass(connectionDB.getConnection(connectionDB.login, connectionDB.pass), textField_3.getText(), false, false) == null)
+                        {
+                        	
+                        	System.out.println("OK");
+                        }
+                        else
+                        	System.out.println("NOOoo");
+						//connectionDB.InsertData(connectionDB.getConnection(connectionDB.login, connectionDB.pass), textField_3.getText(), passwordField.getText(), textField.getText(), textField_1.getText(), textField_2.getText(), Type);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					}
 				});
 				okButton.setActionCommand("OK");
