@@ -2,6 +2,7 @@ package zevs.authorization;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -67,7 +68,11 @@ public class Authorization extends ConnectionDB {
 					String result = checkLoginPass(getConnection(login, pass), textField.getText(),true, true);
 					System.out.println(passwordField.getPassword());
 					if(result == null)
+					{
+						JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);
+						
 						return;
+					}
 					if(result.equals(textField.getText() + passwordField.getText() + "user"))
 					{
 					startWorkspace();

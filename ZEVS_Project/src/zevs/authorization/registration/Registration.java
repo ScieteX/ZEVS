@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -102,15 +103,33 @@ public class Registration  extends JDialog  {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 					try {
-						
-                        if(connectionDB.checkLoginPass(connectionDB.getConnection(connectionDB.login, connectionDB.pass), textField_3.getText(), false, false) == null)
+						Connection connection = connectionDB.getConnection(connectionDB.login, connectionDB.pass);
+						if(textField.getText().isEmpty() || textField_1.getText().isEmpty()  || textField_2.getText().isEmpty() || textField_3.getText().isEmpty()  || passwordField.getText().isEmpty() )
+						{
+							JOptionPane.showMessageDialog(Registration.this,"Имеются незаполненные поля","Ошибка",JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						else
+                        if(connectionDB.checkLoginPass(connection, textField_3.getText(), false, false) == null)
                         {
-                        	
+                        	if(passwordField.getText().equals(passwordField_1.getText()) == true)
+                        		connectionDB.InsertData(connection, textField_3.getText(), passwordField.getText(), textField.getText(), textField_1.getText(), textField_2.getText(), Type);
+                        	else {
+                        		 JOptionPane.showMessageDialog(Registration.this,"Пароли не совпадают","Ошибка",JOptionPane.ERROR_MESSAGE);
+                        		 return;
+							}
+                        	JOptionPane.showMessageDialog(Registration.this,"Вы успешно зарегистрированы :)","Поздравляю",JOptionPane.INFORMATION_MESSAGE);
+                        	Registration.this.dispose();
                         	System.out.println("OK");
                         }
                         else
-                        	System.out.println("NOOoo");
-						//connectionDB.InsertData(connectionDB.getConnection(connectionDB.login, connectionDB.pass), textField_3.getText(), passwordField.getText(), textField.getText(), textField_1.getText(), textField_2.getText(), Type);
+                        {
+                        	JOptionPane.showMessageDialog(Registration.this,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
+                        	return;
+                        }
+                        	 
+						
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
