@@ -55,7 +55,7 @@ public class Authorization extends ConnectionDB {
 		JButton button = new JButton("\u0413\u043E\u0441\u0442\u044C");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				startWorkspace();
+				startWorkspace(0);
 			}
 		});
 		button.setBounds(199, 117, 89, 23);
@@ -66,20 +66,28 @@ public class Authorization extends ConnectionDB {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					String result = checkLoginPass(getConnection(login, pass), textField.getText(),true, true);
-					System.out.println(passwordField.getPassword());
+					System.out.println(result);
 					if(result == null)
 					{
-						JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);
 						
 						return;
 					}
+					
 					if(result.equals(textField.getText() + passwordField.getText() + "user"))
 					{
-					startWorkspace();
+					startWorkspace(1);
 					}
+					else					
 					if(result.equals(textField.getText() + passwordField.getText() + "admin"))
 					{
-					startWorkspace();
+					startWorkspace(3);
+					return;
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);
+						return;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -119,18 +127,20 @@ public class Authorization extends ConnectionDB {
 		button_3.setBounds(335, 167, 89, 23);
 		frame.getContentPane().add(button_3);
 	}
-	protected void startWorkspace()
+	protected void startWorkspace(final int number)
 	{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Workspace window = new Workspace();
 					window.frame.setVisible(true);
+					window.removeTab(number);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 		frame.dispose();
+		return;
 	}
 }
