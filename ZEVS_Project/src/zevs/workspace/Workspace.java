@@ -6,7 +6,6 @@ import zevs.ConnectionDB;
 import java.awt.GridLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
-import javax.swing.JMenu;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -43,7 +42,7 @@ public class Workspace extends ConnectionDB {
 		panel.add(label, "flowx,cell 0 0,alignx left,aligny center");
 		
 		textField = new JTextField();
-		textField.setToolTipText("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430:");
+		textField.setToolTipText("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(textField, "cell 0 0,growx,aligny top");
 		textField.setColumns(10);
 		
@@ -51,6 +50,7 @@ public class Workspace extends ConnectionDB {
 		panel.add(scrollPane, "cell 0 1,grow");
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		
@@ -61,6 +61,7 @@ public class Workspace extends ConnectionDB {
 		panel.add(btnNewButton_1, "cell 0 0");
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setToolTipText("\u0412\u044B\u0431\u043E\u0440 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438 \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(comboBox, "cell 0 0,alignx right");
 		
 		JPanel panel_1 = new JPanel();
