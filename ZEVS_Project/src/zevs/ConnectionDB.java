@@ -64,5 +64,17 @@ public class ConnectionDB
 		}
 		return null;
 	}
+	protected String getTextData(Connection connection, String Name) throws Exception
+	{
+		String resultString = null;
+	PreparedStatement preparedStatement = connection.prepareStatement("");
+	ResultSet result = preparedStatement.executeQuery();
+	while(result.next())
+	{
+		resultString = result.getString("Text");
+	}
+	return resultString;
+	}
+	
 
 }

@@ -3,15 +3,22 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
+
 import java.awt.GridLayout;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.JTextArea;
+
 import java.awt.Font;
+import java.sql.Connection;
+
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
@@ -21,12 +28,18 @@ public class Workspace extends ConnectionDB {
 	public JFrame frame;
     public 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private JTextField textField;
-	
+	private Connection connectionUser;
+	//private Connection connectionAdmin;
 	public Workspace() {
 		initialize();
 	}
 
 	private void initialize() {
+		try {
+			connectionUser = getConnection(login, pass);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		frame = new JFrame();
 		frame.setBounds(100, 100, 652, 395);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
