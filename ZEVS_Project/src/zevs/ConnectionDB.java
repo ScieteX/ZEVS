@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ConnectionDB 
 {
@@ -30,8 +31,7 @@ public class ConnectionDB
 	public String checkLoginPass(Connection connection, String Login, boolean pass, boolean type) throws Exception
 	{
 		String ResultReturn = null;
-		Connection con = connection;
-		PreparedStatement statement = con.prepareStatement("SELECT Login, Password, Type FROM zevsdb.users WHERE Login = '"+Login+"'");
+		PreparedStatement statement = connection.prepareStatement("SELECT Login, Password, Type FROM zevsdb.users WHERE Login = '"+Login+"'");
 		ResultSet result = statement.executeQuery();
 		while(result.next())
 		{
@@ -66,8 +66,8 @@ public class ConnectionDB
 	}
 	protected String getTextData(Connection connection, String Name) throws Exception
 	{
-		String resultString = null;
-	PreparedStatement preparedStatement = connection.prepareStatement("");
+	String resultString = null;
+	PreparedStatement preparedStatement = connection.prepareStatement("SELECT Name, Text FROM zevsdb.textdata WHERE Name = '"+Name+"'");
 	ResultSet result = preparedStatement.executeQuery();
 	while(result.next())
 	{
@@ -76,5 +76,16 @@ public class ConnectionDB
 	return resultString;
 	}
 	
+	protected ArrayList getAllTextName(Connection connection) throws Exception
+	{
+		ArrayList list = new ArrayList();
+		PreparedStatement preparedStatement = connection.prepareStatement("SELECT Name FROM zevsdb.textdata");
+		ResultSet result = preparedStatement.executeQuery();
+		while(result.next())
+		{
+			list.add(result.getString("Name"));
+		}
+		return list;
+	}
 
 }

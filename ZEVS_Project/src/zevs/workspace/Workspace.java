@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import zevs.ConnectionDB;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
@@ -21,6 +22,14 @@ import java.sql.Connection;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
+
+import javax.swing.DefaultComboBoxModel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class Workspace extends ConnectionDB {
@@ -62,21 +71,37 @@ public class Workspace extends ConnectionDB {
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, "cell 0 1,grow");
 		
-		JTextArea textArea = new JTextArea();
+		final JTextArea textArea = new JTextArea();
+		textArea.setAutoscrolls(false);
 		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		
 		JButton btnNewButton = new JButton("<<<");
 		panel.add(btnNewButton, "cell 0 0");
 		
 		JButton btnNewButton_1 = new JButton(">>>");
 		panel.add(btnNewButton_1, "cell 0 0");
 		
-		JComboBox comboBox = new JComboBox();
+		final JComboBox comboBox;
+		try {
+			comboBox = new JComboBox(getAllTextName(connectionUser).toArray());
+			comboBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						textArea.setText(getTextData(connectionUser, (String)comboBox.getSelectedItem()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					textArea.setCaretPosition(0);
+					
+				}
+			});
+		
 		comboBox.setToolTipText("\u0412\u044B\u0431\u043E\u0440 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438 \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(comboBox, "cell 0 0,alignx right");
-		
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Консультация", null, panel_1, null);
 		
