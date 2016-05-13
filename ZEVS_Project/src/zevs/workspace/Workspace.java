@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import zevs.ConnectionDB;
 
 import java.awt.GridLayout;
-import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
@@ -22,11 +21,7 @@ import java.sql.Connection;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import javax.swing.border.LineBorder;
 
-import java.awt.Color;
-
-import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -84,7 +79,7 @@ public class Workspace extends ConnectionDB {
 		
 		final JComboBox comboBox;
 		try {
-			comboBox = new JComboBox(getAllTextName(connectionUser).toArray());
+			comboBox = new JComboBox(getAllTextName(connectionUser,0).toArray());
 			comboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {

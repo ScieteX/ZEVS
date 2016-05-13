@@ -66,20 +66,35 @@ public class ConnectionDB
 	}
 	protected String getTextData(Connection connection, String Name) throws Exception
 	{
-	String resultString = null;
-	PreparedStatement preparedStatement = connection.prepareStatement("SELECT Name, Text FROM zevsdb.textdata WHERE Name = '"+Name+"'");
+	String resultString = "";
+	String query = null;
+	if(Name.equals("Âñå"))
+	{
+		query = "SELECT Text FROM zevsdb.textdata";
+	}
+	else
+		query = "SELECT Name, Text FROM zevsdb.textdata WHERE Name = '"+Name+"'";
+	PreparedStatement preparedStatement = connection.prepareStatement(query);
 	ResultSet result = preparedStatement.executeQuery();
 	while(result.next())
 	{
-		resultString = result.getString("Text");
+		resultString += result.getString("Text");
+		resultString += "\n-----------------------ÊÎÍÅÖ------------------------------\n";
 	}
 	return resultString;
 	}
 	
-	protected ArrayList getAllTextName(Connection connection) throws Exception
+	protected ArrayList getAllTextName(Connection connection, int typeCategory) throws Exception
 	{
+		String query = "SELECT Name FROM zevsdb.textdata"; 
 		ArrayList list = new ArrayList();
-		PreparedStatement preparedStatement = connection.prepareStatement("SELECT Name FROM zevsdb.textdata");
+		switch(typeCategory)
+		{
+		case 1: query = "SELECT Name FROM zevsdb.category";
+		break;
+		default: list.add("Âñå");
+		}
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
 		ResultSet result = preparedStatement.executeQuery();
 		while(result.next())
 		{
