@@ -77,7 +77,6 @@ public class Workspace extends ConnectionDB {
 		textField.setToolTipText("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(textField, "cell 0 0,growx,aligny top");
 		textField.setColumns(10);
-		//textField.setHighlighter(highlighter);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, "cell 0 1,grow");
@@ -137,30 +136,36 @@ public class Workspace extends ConnectionDB {
 	{
 		try
 		{
+			int test1 = 0;
+		textField.setBackground(Color.WHITE);
 		highlighter.removeAllHighlights();
 		String textA = textArea.getText().toLowerCase();
 		String textF = textField.getText().toLowerCase();
 		int start = textA.indexOf(textF,0);
-		int end = start + textF.length();	
+		if(start == -1 || textF.length() == 0)
+		{
+			textField.setBackground(Color.PINK);
+			return;
+		}
+		int end = start + textF.length();
+		highlighter.addHighlight(start, end, painter);
+
 		while(true)
 		{
-			if(start > textA.length())
+		 test1 = start + 1;
+			start = textA.indexOf(textF,test1);
+			 end = start + textF.length();
+		if (start != -1)
 			{
-				break;
+			highlighter.addHighlight(start, end, painter);
 			}
 			else
-			{
-				int test = start;
-				start = textA.indexOf(textF, test);
-				end = start + textF.length();
-				 highlighter.addHighlight(start, end, painter);
-			}
+				if (start == -1)
+							break;						
+		 }
 		}
-	     //highlighter.addHighlight(start, end, painter);
-	     //textArea.setCaretPosition(start);
-	            }
-	            catch (Exception e)
-	            {
+	    catch (Exception e)
+	       {
 	            	e.printStackTrace();
 	            }
 		
