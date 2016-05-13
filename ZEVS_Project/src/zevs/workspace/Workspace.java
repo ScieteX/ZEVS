@@ -30,6 +30,8 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class Workspace extends ConnectionDB {
@@ -69,11 +71,15 @@ public class Workspace extends ConnectionDB {
 		panel.add(label, "flowx,cell 0 0,alignx left,aligny center");
 		
 		textField = new JTextField();
-		textField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		textField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent arg0) {
+				search();
+			}
+			public void keyReleased(KeyEvent arg0) {
 				search();
 			}
 		});
+
 		textField.setToolTipText("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(textField, "cell 0 0,growx,aligny top");
 		textField.setColumns(10);
@@ -136,7 +142,7 @@ public class Workspace extends ConnectionDB {
 	{
 		try
 		{
-			int test1 = 0;
+		int nextStep = 0;
 		textField.setBackground(Color.WHITE);
 		highlighter.removeAllHighlights();
 		String textA = textArea.getText().toLowerCase();
@@ -149,11 +155,11 @@ public class Workspace extends ConnectionDB {
 		}
 		int end = start + textF.length();
 		highlighter.addHighlight(start, end, painter);
-
+        textArea.setCaretPosition(start);
 		while(true)
 		{
-		 test1 = start + 1;
-			start = textA.indexOf(textF,test1);
+		 nextStep = start + 1;
+			start = textA.indexOf(textF,nextStep);
 			 end = start + textF.length();
 		if (start != -1)
 			{
