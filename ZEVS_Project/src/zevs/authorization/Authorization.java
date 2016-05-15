@@ -132,14 +132,14 @@ public class Authorization extends ConnectionDB {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Workspace window = new Workspace();
-					window.frame.setVisible(true);
+						Workspace window = new Workspace();
+					window.frame.setVisible(true);;
 					window.removeTab(number);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});
+		});;
 		frame.dispose();
 		return;
 	}

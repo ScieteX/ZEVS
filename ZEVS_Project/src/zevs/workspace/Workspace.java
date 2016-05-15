@@ -224,9 +224,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textArea_1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		scrollPane_1.setViewportView(textArea_1);
 		jTextAreaWriter = new JTextAreaWriter(textArea_1);
-		rete.addOutputRouter("t", jTextAreaWriter);
-		//rete.addInputRouter("t", reader, true);
-		
 		textField_1 = new JTextField();
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -239,7 +236,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Администрирование", null, panel_2, null);
-		
+		//rete.addOutputRouter("t", jTextAreaWriter);
+				//rete.addInputRouter("t", reader, true);
 	}
 	public void removeTab (int type)
 	{
