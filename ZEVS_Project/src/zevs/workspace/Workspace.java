@@ -37,6 +37,7 @@ import javax.swing.text.Highlighter;
 
 
 
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -197,6 +198,19 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(spinner, "cell 1 0,growx,aligny center");
 		try {
 			comboBox_1 = new JComboBox(getAllTextName(connectionUser,2).toArray());
+			comboBox_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						rete.reset();
+						rete.eval(getJessCode(connectionUser, (String) comboBox_1.getSelectedItem()));
+						rete.run();
+						//System.out.println(getJessCode(connectionUser, (String) comboBox_1.getSelectedItem()));
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -211,7 +225,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		scrollPane_1.setViewportView(textArea_1);
 		jTextAreaWriter = new JTextAreaWriter(textArea_1);
 		rete.addOutputRouter("t", jTextAreaWriter);
-		rete.addInputRouter("t", reader, true);
+		//rete.addInputRouter("t", reader, true);
 		
 		textField_1 = new JTextField();
 		textField_1.addActionListener(new ActionListener() {
