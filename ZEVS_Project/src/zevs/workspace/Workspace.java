@@ -30,10 +30,22 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 
+
+
+
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 
 public class Workspace extends ConnectionDB {
@@ -48,6 +60,9 @@ public class Workspace extends ConnectionDB {
 	private ArrayList startText = new ArrayList();
 	private ArrayList endText = new ArrayList();
 	private int step = 0;
+	private JLabel label_1;
+	private JComboBox comboBox_1;
+	private JTextField textField_1;
 	//private Connection connectionAdmin;
 	public Workspace() {
 		initialize();
@@ -61,7 +76,7 @@ public class Workspace extends ConnectionDB {
 		}
 		highlighter = new DefaultHighlighter();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 652, 395);
+		frame.setBounds(100, 100, 569, 397);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -69,7 +84,7 @@ public class Workspace extends ConnectionDB {
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Поиск данных", null, panel, null);
-		panel.setLayout(new MigLayout("", "[611px,grow]", "[20px][grow]"));
+		panel.setLayout(new MigLayout("", "[611px,grow]", "[20px][grow][]"));
 		
 		JLabel label = new JLabel("\u041F\u043E\u0438\u0441\u043A:");
 		panel.add(label, "flowx,cell 0 0,alignx left,aligny center");
@@ -108,13 +123,13 @@ public class Workspace extends ConnectionDB {
 			}
 		});
 		panel.add(btnNewButton, "cell 0 0");
-		
 		JButton btnNewButton_1 = new JButton(">>>");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					step(step);		
-					step++;
+					step ++;
+					step(step);
+			
 				} catch (BadLocationException e) {
 					e.printStackTrace();
 				}
@@ -139,11 +154,41 @@ public class Workspace extends ConnectionDB {
 		
 		comboBox.setToolTipText("\u0412\u044B\u0431\u043E\u0440 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438 \u043F\u043E\u0438\u0441\u043A\u0430");
 		panel.add(comboBox, "cell 0 0,alignx right");
+		
+		label_1 = new JLabel("\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435 \u0432\u0432\u043E\u0434\u0430...");
+		panel.add(label_1, "cell 0 2");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Консультация", null, panel_1, null);
+		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		panel_1.setLayout(new MigLayout("", "[64px][][]", "[20px][306px,grow][]"));
+		JComboBox comboBox_3 = new JComboBox(environment.getAvailableFontFamilyNames());
+		comboBox_3.setToolTipText("\u0422\u0438\u043F \u0448\u0440\u0438\u0444\u0442\u0430");
+		panel_1.add(comboBox_3, "cell 0 0,alignx right,aligny center");
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setToolTipText("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430");
+		spinner.setModel(new SpinnerNumberModel(new Integer(14), null, null, new Integer(1)));
+		panel_1.add(spinner, "cell 1 0,alignx right,aligny center");
+		try {
+			comboBox_1 = new JComboBox(getAllTextName(connectionUser,2).toArray());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		comboBox_1.setToolTipText("\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u043A\u043E\u043D\u0441\u0443\u043B\u044C\u0442\u0430\u0446\u0438\u0438");
+		panel_1.add(comboBox_1, "cell 2 0,alignx right,aligny center");
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_1.add(scrollPane_1, "cell 0 1 3 1,grow");
+		
+		JTextArea textArea_1 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_1);
+		
+		textField_1 = new JTextField();
+		panel_1.add(textField_1, "cell 0 2 3 1,growx");
+		textField_1.setColumns(10);
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Администрирование", null, panel_2, null);
@@ -175,11 +220,15 @@ public class Workspace extends ConnectionDB {
 		String textA = textArea.getText().toLowerCase();
 		String textF = textField.getText().toLowerCase();
 		if(textF.length() == 0)
+		{
+			label_1.setText("Ожидание ввода...");
 			return;
+		}
 		int start = textA.indexOf(textF,0);
 		if(start == -1)
 		{
 			textField.setBackground(Color.PINK);
+			label_1.setText("Совпадений не найдено.");
 			return;
 		}
 		int end = start + textF.length();
@@ -198,7 +247,10 @@ public class Workspace extends ConnectionDB {
 			}
 			else
 				if (start == -1)
-							break;						
+				{
+					label_1.setText("Совпадений найдено " + startText.size() + " из " + textA.length());
+							break;	
+				}
 		 }
 		}
 	    catch (Exception e)
@@ -207,8 +259,9 @@ public class Workspace extends ConnectionDB {
 	 }
 	public void step(int numb) throws BadLocationException
 	{
+		
         textArea.setHighlighter(highlighter);
-		if( numb <= startText.size())
+		if( numb < startText.size() && numb >= 0)
 		{
 		int start = Integer.parseInt((String) startText.get(numb));
 		int end = Integer.parseInt((String) endText.get(numb));
@@ -218,10 +271,11 @@ public class Workspace extends ConnectionDB {
 		System.out.println(step);
 	    }
 		else
-			if(numb < 0)
+			if(numb < 0 || numb > startText.size())
 		{
 			step = 0;
-			search(Color.YELLOW);
+			step(step);
+			//search(Color.YELLOW);
 		}
 		
 	}

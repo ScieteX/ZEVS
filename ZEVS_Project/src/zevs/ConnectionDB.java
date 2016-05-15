@@ -92,6 +92,8 @@ public class ConnectionDB
 		{
 		case 1: query = "SELECT Name FROM zevsdb.category";
 		break;
+		case 2: query = "SELECT Name FROM zevsdb.jessdata";
+		break;
 		default: list.add("Все");
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
