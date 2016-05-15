@@ -104,5 +104,17 @@ public class ConnectionDB
 		}
 		return list;
 	}
+	protected String getJessCode(Connection connection, String Name) throws Exception
+	{
+		String resultString = null;
+		String query = "SELECT Name, JessCode FROM zevsdb.jessdata WHERE Name = '"+Name+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet result = preparedStatement.executeQuery();
+		while(result.next())
+		{
+			resultString = result.getString("JessCode");
+		}
+		return resultString;
+	}
 
 }
