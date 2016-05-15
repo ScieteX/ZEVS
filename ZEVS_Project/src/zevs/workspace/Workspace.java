@@ -19,14 +19,16 @@ import javax.swing.JTextArea;
 
 import java.awt.Font;
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
 
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
+
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -43,6 +45,9 @@ public class Workspace extends ConnectionDB {
 	JTextArea textArea;
 	private Highlighter highlighter;
 	private Highlighter.HighlightPainter painter;
+	private ArrayList startText = new ArrayList();
+	private ArrayList endText = new ArrayList();
+	private int step = 0;
 	//private Connection connectionAdmin;
 	public Workspace() {
 		initialize();
@@ -55,7 +60,6 @@ public class Workspace extends ConnectionDB {
 			e.printStackTrace();
 		}
 		highlighter = new DefaultHighlighter();
-		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 		frame = new JFrame();
 		frame.setBounds(100, 100, 652, 395);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,11 +96,30 @@ public class Workspace extends ConnectionDB {
 		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		textArea.setHighlighter(highlighter);
 		JButton btnNewButton = new JButton("<<<");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				step--;
+				try {
+					step(step);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		panel.add(btnNewButton, "cell 0 0");
 		
 		JButton btnNewButton_1 = new JButton(">>>");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					step(step);
+					step++;
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		panel.add(btnNewButton_1, "cell 0 0");
 		
 		final JComboBox comboBox;
@@ -143,12 +166,18 @@ public class Workspace extends ConnectionDB {
 		try
 		{
 		int nextStep = 0;
+		startText.clear();
+		endText.clear();
+		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+		textArea.setHighlighter(highlighter);
 		textField.setBackground(Color.WHITE);
 		highlighter.removeAllHighlights();
 		String textA = textArea.getText().toLowerCase();
 		String textF = textField.getText().toLowerCase();
+		if(textF.length() == 0)
+			return;
 		int start = textA.indexOf(textF,0);
-		if(start == -1 || textF.length() == 0)
+		if(start == -1)
 		{
 			textField.setBackground(Color.PINK);
 			return;
@@ -158,6 +187,8 @@ public class Workspace extends ConnectionDB {
         textArea.setCaretPosition(start);
 		while(true)
 		{
+			startText.add(""+start);
+			endText.add(""+end);
 		 nextStep = start + 1;
 			start = textA.indexOf(textF,nextStep);
 			 end = start + textF.length();
@@ -171,9 +202,31 @@ public class Workspace extends ConnectionDB {
 		 }
 		}
 	    catch (Exception e)
-	       {
-	            	e.printStackTrace();
+	       {      	e.printStackTrace();
 	            }
-		
 	 }
+	public void step(int numb) throws BadLocationException
+	{
+        textArea.setHighlighter(highlighter);
+       // int goToStart = 0;
+		if( numb < startText.size() && numb <= endText.size())
+		{
+		int start = Integer.parseInt((String) startText.get(numb));
+		//goToStart = start;
+		System.out.println(start);
+		int end = Integer.parseInt((String) endText.get(numb));
+		System.out.println(end);
+		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN);
+        textArea.getHighlighter().addHighlight(start, end, painter);
+		textArea.setCaretPosition(start);
+		//highlighter.addHighlight(start, end, painter);
+	    }
+		else
+		{
+			search();
+			step = 0;
+		}
+		
+	}
+	
 	}
