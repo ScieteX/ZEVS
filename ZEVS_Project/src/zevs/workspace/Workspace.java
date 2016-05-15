@@ -77,10 +77,10 @@ public class Workspace extends ConnectionDB {
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent arg0) {
-				search();
+				search(Color.YELLOW);
 			}
 			public void keyReleased(KeyEvent arg0) {
-				search();
+				search(Color.YELLOW);
 			}
 		});
 
@@ -99,7 +99,7 @@ public class Workspace extends ConnectionDB {
 		JButton btnNewButton = new JButton("<<<");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				step--;
+				step --;
 				try {
 					step(step);
 				} catch (BadLocationException e) {
@@ -113,7 +113,7 @@ public class Workspace extends ConnectionDB {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					step(step);
+					step(step);		
 					step++;
 				} catch (BadLocationException e) {
 					e.printStackTrace();
@@ -161,14 +161,14 @@ public class Workspace extends ConnectionDB {
        }
 		
 	}
-	protected void search()
+	protected void search(Color color)
 	{
 		try
 		{
 		int nextStep = 0;
 		startText.clear();
 		endText.clear();
-		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+		painter = new DefaultHighlighter.DefaultHighlightPainter(color);
 		textArea.setHighlighter(highlighter);
 		textField.setBackground(Color.WHITE);
 		highlighter.removeAllHighlights();
@@ -208,23 +208,20 @@ public class Workspace extends ConnectionDB {
 	public void step(int numb) throws BadLocationException
 	{
         textArea.setHighlighter(highlighter);
-       // int goToStart = 0;
-		if( numb < startText.size() && numb <= endText.size())
+		if( numb <= startText.size())
 		{
 		int start = Integer.parseInt((String) startText.get(numb));
-		//goToStart = start;
-		System.out.println(start);
 		int end = Integer.parseInt((String) endText.get(numb));
-		System.out.println(end);
 		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN);
         textArea.getHighlighter().addHighlight(start, end, painter);
 		textArea.setCaretPosition(start);
-		//highlighter.addHighlight(start, end, painter);
+		System.out.println(step);
 	    }
 		else
+			if(numb < 0)
 		{
-			search();
 			step = 0;
+			search(Color.YELLOW);
 		}
 		
 	}
