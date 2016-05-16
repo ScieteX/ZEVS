@@ -12,7 +12,6 @@ import zevs.ConnectionDB;
 import zevs.authorization.registration.Registration;
 import zevs.workspace.Workspace;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -24,10 +23,8 @@ public class Authorization extends ConnectionDB {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	
-	public Authorization() {
-		initialize();
-	}
-	private void initialize() {
+	
+	public void initialize() {
 		frame = new JFrame();
 		frame.setAlwaysOnTop(true);
 		frame.setResizable(false);
@@ -126,20 +123,14 @@ public class Authorization extends ConnectionDB {
 		});
 		button_3.setBounds(335, 167, 89, 23);
 		frame.getContentPane().add(button_3);
+		frame.setVisible(true);
 	}
 	protected void startWorkspace(final int number)
 	{
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-						Workspace window = new Workspace();
-					window.frame.setVisible(true);;
+		Workspace window = new Workspace();
+                   window.initialize();
 					window.removeTab(number);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});;
+				
 		frame.dispose();
 		return;
 	}

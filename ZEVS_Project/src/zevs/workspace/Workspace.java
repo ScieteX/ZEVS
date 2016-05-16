@@ -38,6 +38,8 @@ import javax.swing.text.Highlighter;
 
 
 
+
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -49,6 +51,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
@@ -74,12 +77,9 @@ public class Workspace extends ConnectionDB {
 	private Rete rete = new Rete();
 	private JTextAreaWriter jTextAreaWriter;
 	private TextReader reader = new TextReader(false);
+	private boolean activJess = false;
 	//private Connection connectionAdmin;
-	public Workspace() {
-		initialize();
-	}
-
-	private void initialize() {
+		public void initialize() {
 		try {
 			connectionUser = getConnection(login, pass);
 		} catch (Exception e) {
@@ -201,9 +201,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			comboBox_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						rete.reset();
-						rete.eval(getJessCode(connectionUser, (String) comboBox_1.getSelectedItem()));
-						rete.run();
+						setJessCode((String)comboBox_1.getSelectedItem());
+					//activJess = true;
 						//System.out.println(getJessCode(connectionUser, (String) comboBox_1.getSelectedItem()));
 						
 					} catch (Exception e) {
@@ -219,11 +218,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_1.add(scrollPane_1, "cell 0 1 3 1,grow");
-		
 		textArea_1 = new JTextArea();
 		textArea_1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		scrollPane_1.setViewportView(textArea_1);
 		jTextAreaWriter = new JTextAreaWriter(textArea_1);
+		rete.addOutputRouter("t", jTextAreaWriter);
+		rete.addInputRouter("t", reader, true);
 		textField_1 = new JTextField();
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -236,9 +236,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Администрирование", null, panel_2, null);
-		//rete.addOutputRouter("t", jTextAreaWriter);
-				//rete.addInputRouter("t", reader, true);
+		//frame.setVisible(true);
+		runJessCode();
 	}
+		
 	public void removeTab (int type)
 	{
        switch(type)
@@ -250,6 +251,35 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
         default: return;
        }
 		
+	}
+	protected void runJessCode()
+	{
+		System.out.println("Yesssss");
+		frame.setVisible(true);
+		while(true)
+		{
+			if(activJess == true)
+			{
+				try {
+					rete.run();
+				} catch (JessException e) {
+					e.printStackTrace();
+				}
+			}
+			else
+			activJess = false;
+		}
+	}
+	protected void setJessCode(String Name)
+	{
+		try {
+		rete.reset();		
+		rete.eval(getJessCode(connectionUser, Name));
+		} catch (JessException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	protected void search(Color color)
 	{
