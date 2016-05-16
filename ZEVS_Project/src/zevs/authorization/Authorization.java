@@ -128,9 +128,8 @@ public class Authorization extends ConnectionDB {
 	protected void startWorkspace(final int number)
 	{
 		Workspace window = new Workspace();
-                   window.initialize();
-					window.removeTab(number);
-				
+		        window.initialize();
+				window.removeTab(number);
 		frame.dispose();
 		return;
 	}
