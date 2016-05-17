@@ -3,7 +3,6 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
-import zevs.authorization.Authorization;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -24,24 +23,9 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-
-
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -82,11 +66,9 @@ public class Workspace extends ConnectionDB {
 	private TextReader reader = new TextReader(false);
 	public boolean activJess = false;
 	//private Connection connectionAdmin;
-	public static void main(String[] args)
-	{
-		Workspace workspace = new Workspace();
-		workspace.initialize();
-	}
+		/**
+		 * @wbp.parser.entryPoint
+		 */
 		public void initialize() {
 		try {
 			connectionUser = getConnection(login, pass);
@@ -244,7 +226,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
 		frame.setVisible(true);
-		runJessCode();
+	    runJessCode();
+		
 	}
 		
 	public void removeTab (int type)
@@ -261,19 +244,24 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	}
 	protected void runJessCode()
 	{
-		System.out.println("Yesssss");
-		while(true)
-		{
-			if(activJess != true)
-			{
-				try {
-					rete.run();
-				} catch (JessException e) {
-					e.printStackTrace();
+		new Thread(new Runnable() {
+			
+			public void run() {
+				System.out.println("Yesssss");
+				while(true)
+				{
+					if(activJess != true)
+					{
+						try {
+							rete.run();
+						} catch (JessException e) {
+							e.printStackTrace();
+						}
+					}
+					activJess = false;
 				}
 			}
-			activJess = false;
-		}
+		}).start();
 	}
 	protected void setJessCode(String Name)
 	{
