@@ -38,6 +38,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import com.sun.javafx.geom.AreaOp.AddOp;
+
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
