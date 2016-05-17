@@ -61,10 +61,10 @@ public class Workspace extends ConnectionDB {
 	private JTextField textField_1;
 	private JTextArea textArea_1;
 	private int sizeFont = 14;
-	private Rete rete = new Rete();
+	private  Rete rete = new Rete();
 	private JTextAreaWriter jTextAreaWriter;
 	private TextReader reader = new TextReader(false);
-	public boolean activJess = false;
+	public  boolean activJess = false;
 	//private Connection connectionAdmin;
 		/**
 		 * @wbp.parser.entryPoint
@@ -191,6 +191,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			comboBox_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
+					textArea_1.setText("");
+					rete.halt();
+					rete.reset();
 						setJessCode((String)comboBox_1.getSelectedItem());
 					activJess = true;
 						
@@ -214,8 +217,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textField_1 = new JTextField();
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(textField_1.getText().equals("XXX"))
+				{
+					try {
+						rete.halt();
+					} catch (JessException e) {
+						e.printStackTrace();
+					}
+					System.out.println(textField_1.getText());
+				}
+				else
 				reader.appendText(textField_1.getText() + "\n");
-				System.out.println(textField_1.getText());
 			}
 		});
 		panel_1.add(textField_1, "cell 0 2 3 1,growx");
@@ -226,8 +238,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
 		frame.setVisible(true);
+		System.out.println(Thread.currentThread().getId());
 	    runJessCode();
-		
 	}
 		
 	public void removeTab (int type)
@@ -247,17 +259,26 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		new Thread(new Runnable() {
 			
 			public void run() {
+				System.out.println(Thread.currentThread().getId());
 				System.out.println("Yesssss");
 				while(true)
 				{
-					if(activJess != true)
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if(activJess == true)
 					{
 						try {
-							rete.run();
+							System.out.println("AKTIV");
+						rete.run();
+						System.out.println("STOP");
 						} catch (JessException e) {
 							e.printStackTrace();
 						}
 					}
+					else
 					activJess = false;
 				}
 			}
@@ -266,7 +287,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void setJessCode(String Name)
 	{
 		try {	
-			//System.out.println(getJessCode(connectionUser, Name));
+		//System.out.println(getJessCode(connectionUser, Name));
 		rete.eval(getJessCode(connectionUser, Name));
 		rete.reset();	
 		} catch (JessException e) {

@@ -133,9 +133,5 @@ public class Authorization extends ConnectionDB {
 		frame.dispose();
 		return;
 	}
-	public static void main(String[] args)
-	{
-		Workspace window = new Workspace();
-        window.initialize();
-	}
+	
 }
