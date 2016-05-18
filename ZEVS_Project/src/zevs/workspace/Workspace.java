@@ -38,8 +38,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import com.sun.javafx.geom.AreaOp.AddOp;
-
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
@@ -63,10 +61,11 @@ public class Workspace extends ConnectionDB {
 	private JTextField textField_1;
 	private JTextArea textArea_1;
 	private int sizeFont = 14;
-	private  Rete rete = new Rete();
+	private volatile Rete rete = new Rete();
 	private JTextAreaWriter jTextAreaWriter;
 	private TextReader reader = new TextReader(false);
-	public  boolean activJess = false;
+	private  boolean activJess = false;
+	private boolean isRun = true;
 	//private Connection connectionAdmin;
 		/**
 		 * @wbp.parser.entryPoint
@@ -189,16 +188,16 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		spinner.setModel(new SpinnerNumberModel(new Integer(14), null, null, new Integer(1)));
 		panel_1.add(spinner, "cell 1 0,growx,aligny center");
 		try {
+
 			comboBox_1 = new JComboBox(getAllTextName(connectionUser,2).toArray());
 			comboBox_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 					textArea_1.setText("");
-					rete.halt();
-					rete.reset();
+					killThread();
 						setJessCode((String)comboBox_1.getSelectedItem());
+						isRun = true;
 					activJess = true;
-						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -221,11 +220,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			public void actionPerformed(ActionEvent arg0) {
 				if(textField_1.getText().equals("XXX"))
 				{
-					try {
-						rete.halt();
-					} catch (JessException e) {
-						e.printStackTrace();
-					}
+						killThread();
+						try {
+							rete.eval("");
+						} catch (JessException e) {
+							e.printStackTrace();
+						}
 					System.out.println(textField_1.getText());
 				}
 				else
@@ -240,9 +240,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
 		frame.setVisible(true);
+		runJessCode.start();
 		System.out.println(Thread.currentThread().getId());
-	    runJessCode();
 	}
+	
 		
 	public void removeTab (int type)
 	{
@@ -256,35 +257,53 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
        }
 		
 	}
-	protected void runJessCode()
-	{
-		new Thread(new Runnable() {
-			
-			public void run() {
-				System.out.println(Thread.currentThread().getId());
-				System.out.println("Yesssss");
-				while(true)
+	protected Thread runJessCode = new Thread(new Runnable() {
+		public void run() {
+			isRun = true;
+			System.out.println(runJessCode.currentThread().getId());
+			while(true)
+			{
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			while(isRun)
+			{
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if(activJess == true)
 				{
 					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
+						System.out.println("AKTIV");
+					rete.run();
+					rete.eval("(clear)");
+					activJess = false;
+					System.out.println("STOP");
+					} catch (JessException e) {
 						e.printStackTrace();
 					}
-					if(activJess == true)
-					{
-						try {
-							System.out.println("AKTIV");
-						rete.run();
-						System.out.println("STOP");
-						} catch (JessException e) {
-							e.printStackTrace();
-						}
-					}
-					else
-					activJess = false;
 				}
+				else
+				activJess = false;
 			}
-		}).start();
+			}			
+		}
+	}){
+	};
+	public void killThread()
+	{
+		isRun = false;
+		try {
+			rete.halt();
+			rete.eval("(clear)");
+			rete.reset();
+		} catch (JessException e) {
+			e.printStackTrace();
+		}
 	}
 	protected void setJessCode(String Name)
 	{
