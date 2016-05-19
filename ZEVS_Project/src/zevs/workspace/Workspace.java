@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 
 import java.awt.Font;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
@@ -49,6 +50,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 public class Workspace extends ConnectionDB {
@@ -386,12 +390,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void UserInternalFrame()
 	{
 		JInternalFrame internalFrame = new JInternalFrame("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
-		try {
-			internalFrame.setMaximum(true);
-		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		internalFrame.setVisible(true);
 		internalFrame.setClosable(true);
 		internalFrame.setResizable(true);
@@ -408,7 +406,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel = new JPanel();
 		splitPane.setLeftComponent(panel);
-		panel.setLayout(new MigLayout("", "[][449.00px,grow]", "[20px]"));
+		panel.setLayout(new MigLayout("", "[][449.00px,grow]", "[20px][146.00,grow]"));
 		
 		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
 		panel.add(label, "cell 0 0,alignx trailing");
@@ -417,8 +415,29 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel.add(textField_3, "cell 1 0,growx,aligny top");
 		textField_3.setColumns(10);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, "cell 0 1 2 1,grow");
+		Object [] [] data = new Object [50] [50];
+		try {
+			table = new JTable(data,getUserColumnName(connectionUser).toArray());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		scrollPane.setViewportView(table);
+		
 		JPanel panel_1 = new JPanel();
 		splitPane.setRightComponent(panel_1);
+		panel_1.setLayout(new MigLayout("", "[grow]", "[][grow]"));
+		
+		JLabel lblNewLabel_2 = new JLabel("\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442:");
+		panel_1.add(lblNewLabel_2, "cell 0 0");
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_1.add(scrollPane_1, "cell 0 1,grow");
+		
+		JTextArea textArea_2 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_2);
 	}
 		
 	public void removeTab (int type)
@@ -473,6 +492,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	private JTextField textField_2;
 	private JPasswordField passwordField;
 	private JTextField textField_3;
+	private JTable table;
 	public void killThread()
 	{
 		isRun = false;

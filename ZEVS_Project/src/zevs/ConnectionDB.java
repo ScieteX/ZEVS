@@ -116,5 +116,30 @@ public class ConnectionDB
 		}
 		return resultString;
 	}
+	protected ArrayList getUserColumnName(Connection connection) throws SQLException
+	{ ArrayList Names = new ArrayList();
+	String query = "SELECT * FROM zevsdb.users";
+	PreparedStatement preparedStatement = connection.prepareStatement(query);
+	ResultSet result = preparedStatement.executeQuery();
+	for(int i = 1; i <= result.getMetaData().getColumnCount(); i++)
+	{
+		Names.add(result.getMetaData().getColumnName(i));
+	}
+	return  Names;
+	}
+	
+	protected Object[] [] getUserData(Connection connection) throws SQLException
+	{
+		String query = "SELECT * FROM zevsdb.users";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet result = preparedStatement.executeQuery();
+		Object[] [] dataObjects = new Object [50] [50];
+		while(result.next())
+		{
+			
+		}
+		
+		return dataObjects;
+	}
 
 }
