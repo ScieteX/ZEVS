@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -42,6 +43,12 @@ import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JToolBar;
+import javax.swing.JPasswordField;
+import javax.swing.JSplitPane;
 
 
 public class Workspace extends ConnectionDB {
@@ -65,8 +72,13 @@ public class Workspace extends ConnectionDB {
 	private JTextAreaWriter jTextAreaWriter;
 	private TextReader reader = new TextReader(false);
 	private  boolean activJess = false;
+	private JDesktopPane desktopPane;
 	private boolean isRun = true;
-	//private Connection connectionAdmin;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JLabel lblNewLabel_1;
+	private Connection connectionAdmin;
 		/**
 		 * @wbp.parser.entryPoint
 		 */
@@ -237,13 +249,177 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Администрирование", null, panel_2, null);
+		panel_2.setLayout(new MigLayout("", "[][548px,grow]", "[][331px,grow]"));
+		
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		panel_2.add(toolBar, "cell 0 0");
+		
+		btnNewButton_2 = new JButton("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
+		btnNewButton_2.setEnabled(false);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UserInternalFrame();
+			}
+		});
+		toolBar.add(btnNewButton_2);
+		
+	    btnNewButton_3 = new JButton("\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F");
+		btnNewButton_3.setEnabled(false);
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				InformationInternalFrame();
+			}
+		});
+		toolBar.add(btnNewButton_3);
+		
+		btnNewButton_4 = new JButton("\u0424\u0430\u043A\u0442\u044B/\u041F\u0440\u0430\u0432\u0438\u043B\u0430");
+		btnNewButton_4.setEnabled(false);
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FactsRulesInternalFrame();
+			}
+		});
+		toolBar.add(btnNewButton_4);
+		
+		desktopPane = new JDesktopPane();
+		desktopPane.setBackground(Color.WHITE);
+		panel_2.add(desktopPane, "cell 0 1 2 1,grow");
+		final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
+		internalFrame.setBounds(10, 61, 424, 166);
+		desktopPane.add(internalFrame);
+		internalFrame.getContentPane().setLayout(new MigLayout("", "[][408px,grow]", "[14px][][][][]"));
+		
+		JLabel lblNewLabel = new JLabel("\u041B\u043E\u0433\u0438\u043D:");
+		internalFrame.getContentPane().add(lblNewLabel, "cell 0 0,growx,aligny top");
+		
+		textField_2 = new JTextField();
+		textField_2.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent arg0) {
+				lblNewLabel_1.setVisible(false);
+			}
+		});
+		internalFrame.getContentPane().add(textField_2, "cell 0 1 2 1,growx");
+		textField_2.setColumns(10);
+		
+		JLabel label1 = new JLabel("\u041F\u0430\u0440\u043E\u043B\u044C:");
+		internalFrame.getContentPane().add(label1, "cell 0 2");
+		
+		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent arg0) {
+				lblNewLabel_1.setVisible(false);
+			}
+		});
+		internalFrame.getContentPane().add(passwordField, "cell 0 3 2 1,growx");
+		
+		lblNewLabel_1 = new JLabel("\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0439 \u043B\u043E\u0433\u0438\u043D \u0438\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C!!!");
+		lblNewLabel_1.setForeground(new Color(255, 0, 0));
+		internalFrame.getContentPane().add(lblNewLabel_1, "cell 0 4");
+		lblNewLabel_1.setVisible(false);
+		
+		JButton btnNewButton_5 = new JButton("\u0412\u0445\u043E\u0434");
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String loginStr = textField_2.getText();
+					if(loginStr.equals("ZevsUser"))
+					{
+						lblNewLabel_1.setVisible(true);
+						return;
+					}
+					else
+						connectionAdmin = getConnection(loginStr, passwordField.getText());
+					if( connectionAdmin != null)
+					{
+						UserInternalFrame();
+						InformationInternalFrame();
+						FactsRulesInternalFrame();
+						btnNewButton_2.setEnabled(true);
+						btnNewButton_3.setEnabled(true);
+						btnNewButton_4.setEnabled(true);
+						internalFrame.dispose();
+					}
+					else
+					{
+						lblNewLabel_1.setVisible(true);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		internalFrame.getContentPane().add(btnNewButton_5, "cell 1 4,alignx right");
+		internalFrame.setVisible(true);
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
+		UserInternalFrame();
+	//	InformationInternalFrame();
+	//	FactsRulesInternalFrame();
 		frame.setVisible(true);
 		runJessCode.start();
 		System.out.println(Thread.currentThread().getId());
 	}
-	
+		protected void FactsRulesInternalFrame()
+		{
+			JInternalFrame internalFrame_2 = new JInternalFrame("\u0424\u0430\u043A\u0442\u044B/\u041F\u0440\u0430\u0432\u0438\u043B\u0430");
+			internalFrame_2.setClosable(true);
+			internalFrame_2.setIconifiable(true);
+			internalFrame_2.setMaximizable(true);
+			internalFrame_2.setResizable(true);
+			internalFrame_2.setBounds(0, 69, 319, 33);
+			internalFrame_2.setVisible(true);
+			desktopPane.add(internalFrame_2);
+			
+		}
+		protected void InformationInternalFrame()
+		{
+			JInternalFrame internalFrame_1 = new JInternalFrame("\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F");
+			internalFrame_1.setClosable(true);
+			internalFrame_1.setIconifiable(true);
+			internalFrame_1.setMaximizable(true);
+			internalFrame_1.setResizable(true);
+			internalFrame_1.setBounds(0, 33, 319, 33);
+			internalFrame_1.setVisible(true);
+			desktopPane.add(internalFrame_1);
+		}
+	protected void UserInternalFrame()
+	{
+		JInternalFrame internalFrame = new JInternalFrame("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
+		try {
+			internalFrame.setMaximum(true);
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		internalFrame.setVisible(true);
+		internalFrame.setClosable(true);
+		internalFrame.setResizable(true);
+		internalFrame.setMaximizable(true);
+		internalFrame.setIconifiable(true);
+		internalFrame.setBounds(0, 0, 319, 33);
+		desktopPane.add(internalFrame);
+		internalFrame.getContentPane().setLayout(new MigLayout("", "[508px,grow]", "[244px,grow]"));
+		
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setContinuousLayout(true);
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		internalFrame.getContentPane().add(splitPane, "cell 0 0,grow");
+		
+		JPanel panel = new JPanel();
+		splitPane.setLeftComponent(panel);
+		panel.setLayout(new MigLayout("", "[][449.00px,grow]", "[20px]"));
+		
+		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+		panel.add(label, "cell 0 0,alignx trailing");
+		
+		textField_3 = new JTextField();
+		panel.add(textField_3, "cell 1 0,growx,aligny top");
+		textField_3.setColumns(10);
+		
+		JPanel panel_1 = new JPanel();
+		splitPane.setRightComponent(panel_1);
+	}
 		
 	public void removeTab (int type)
 	{
@@ -294,6 +470,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		}
 	}){
 	};
+	private JTextField textField_2;
+	private JPasswordField passwordField;
+	private JTextField textField_3;
 	public void killThread()
 	{
 		isRun = false;
@@ -390,5 +569,4 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		}
 		
 	}
-	
 	}
