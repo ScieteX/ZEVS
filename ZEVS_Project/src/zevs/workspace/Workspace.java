@@ -462,7 +462,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	{
 		RowFilter  rowFilter = null;
 		try {
-		rowFilter = RowFilter.regexFilter(textField_3.getText(), null);
+		rowFilter = RowFilter.regexFilter(textField_3.getText(), new int[]{});
 		} catch (java.util.regex.PatternSyntaxException e) {
 			return;
 		}
