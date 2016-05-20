@@ -136,6 +136,25 @@ public class ConnectionDB
 	return  defaultTableModel;
 	}
 	
+	protected boolean deleteUser(Connection connection, String idUser)
+	{ 
+		boolean answer = false;
+		try {
+			PreparedStatement insert = connection.prepareStatement("DELETE FROM `zevsdb`.`users` WHERE `idUser`='"+idUser+"'");
+			insert.executeUpdate();
+			answer = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Delete Completed.");
+		}
+				
+		return answer;
+		
+		
+	}
 	
 
 }

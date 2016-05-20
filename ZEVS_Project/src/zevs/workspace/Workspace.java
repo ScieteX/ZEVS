@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -41,14 +43,21 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
@@ -409,13 +418,13 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel = new JPanel();
 		splitPane.setLeftComponent(panel);
-		panel.setLayout(new MigLayout("", "[][449.00px,grow]", "[20px][146.00,grow]"));
+		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][146.00,grow]"));
 		
 		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
 		panel.add(label, "cell 0 0,alignx trailing");
 		
 		textField_3 = new JTextField();
-		panel.add(textField_3, "cell 1 0,growx,aligny top");
+		panel.add(textField_3, "cell 1 0,grow");
 		textField_3.setColumns(10);
 		textField_3.getDocument().addDocumentListener(new DocumentListener() {
 			
@@ -432,12 +441,65 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			}
 		});
 		
+		final JSpinner spinner = new JSpinner();
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+			   String data = spinner.getValue().toString();
+			   int answ = JOptionPane.showConfirmDialog(spinner, "Вы уверены что хотите уделить пользователя с ID = "+data+"?","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+			   if(answ == JOptionPane.YES_OPTION)
+			   {
+				   deleteUser(connectionAdmin, data);
+			   }else
+				   return;
+			}
+		});
+		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		panel.add(spinner, "cell 2 0,grow");
+		
+		JButton btnNewButton_6 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+		btnNewButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		panel.add(btnNewButton_6, "cell 3 0");
+		
+		JButton btnNewButton_7 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+		btnNewButton_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		panel.add(btnNewButton_7, "cell 4 0");
+		
 		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, "cell 0 1 2 1,grow");
+		panel.add(scrollPane, "cell 0 1 5 1,grow");
 		try {
 			sort = new TableRowSorter(getUserData(connectionUser));
 			table = new JTable(getUserData(connectionUser));
 			table.setRowSorter(sort);
+			final JComboBox userAdminCombo = new JComboBox();
+			userAdminCombo.addItem("user");
+			userAdminCombo.addItem("admin");
+			TableColumn tableColumn = table.getColumnModel().getColumn(6);
+			tableColumn.setCellEditor(new DefaultCellEditor(userAdminCombo));
+			table.getModel().addTableModelListener(new TableModelListener() {
+				public void tableChanged(TableModelEvent event) {
+					int row = event.getFirstRow();
+					int column = event.getColumn();
+					int ans = 0;
+					if(column == 6)
+					ans = JOptionPane.showConfirmDialog(userAdminCombo,"Вы уверены в замене?","Предупреждение!!!", JOptionPane.YES_NO_OPTION);
+					if(ans == JOptionPane.YES_OPTION)
+					{
+					TableModel tableModel = (TableModel) event.getSource();
+					System.out.println(tableModel.getValueAt(row, column));
+					}
+					else
+					{
+						System.out.println("No Way");
+					}
+				}
+			});
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
