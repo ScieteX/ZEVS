@@ -6,6 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class ConnectionDB 
 {
@@ -116,30 +122,20 @@ public class ConnectionDB
 		}
 		return resultString;
 	}
-	protected ArrayList getUserColumnName(Connection connection) throws SQLException
-	{ ArrayList Names = new ArrayList();
+	protected TableModel getUserData(Connection connection) throws SQLException
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idUser","Login","Password","Name","Surname","Patronymic","Type"},0);
 	String query = "SELECT * FROM zevsdb.users";
 	PreparedStatement preparedStatement = connection.prepareStatement(query);
 	ResultSet result = preparedStatement.executeQuery();
-	for(int i = 1; i <= result.getMetaData().getColumnCount(); i++)
+	while(result.next())
 	{
-		Names.add(result.getMetaData().getColumnName(i));
+		defaultTableModel.addRow(new Object[]{result.getString("idUser"),result.getString("Login"),result.getString("Password"),
+				                              result.getString("Name"),result.getString("Surname"),result.getString("Patronymic"),
+				                              result.getString("Type")});
 	}
-	return  Names;
+	return  defaultTableModel;
 	}
 	
-	protected Object[] [] getUserData(Connection connection) throws SQLException
-	{
-		String query = "SELECT * FROM zevsdb.users";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
-		ResultSet result = preparedStatement.executeQuery();
-		Object[] [] dataObjects = new Object [50] [50];
-		while(result.next())
-		{
-			
-		}
-		
-		return dataObjects;
-	}
+	
 
 }

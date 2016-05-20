@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.table.TableRowSorter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -33,12 +34,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
-import java.beans.PropertyVetoException;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import jess.JessException;
 import jess.Rete;
@@ -51,8 +53,8 @@ import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 public class Workspace extends ConnectionDB {
@@ -83,6 +85,7 @@ public class Workspace extends ConnectionDB {
 	private JButton btnNewButton_4;
 	private JLabel lblNewLabel_1;
 	private Connection connectionAdmin;
+	private TableRowSorter sort;
 		/**
 		 * @wbp.parser.entryPoint
 		 */
@@ -414,12 +417,27 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textField_3 = new JTextField();
 		panel.add(textField_3, "cell 1 0,growx,aligny top");
 		textField_3.setColumns(10);
+		textField_3.getDocument().addDocumentListener(new DocumentListener() {
+			
+			public void removeUpdate(DocumentEvent arg0) {
+                  Filt();
+			}
+			
+			public void insertUpdate(DocumentEvent arg0) {
+                  Filt();
+			}
+			
+			public void changedUpdate(DocumentEvent arg0) {
+                  Filt();
+			}
+		});
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, "cell 0 1 2 1,grow");
-		Object [] [] data = new Object [50] [50];
 		try {
-			table = new JTable(data,getUserColumnName(connectionUser).toArray());
+			sort = new TableRowSorter(getUserData(connectionUser));
+			table = new JTable(getUserData(connectionUser));
+			table.setRowSorter(sort);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -438,6 +456,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JTextArea textArea_2 = new JTextArea();
 		scrollPane_1.setViewportView(textArea_2);
+	}
+	
+	protected void Filt()
+	{
+		RowFilter  rowFilter = null;
+		try {
+		rowFilter = RowFilter.regexFilter(textField_3.getText(), null);
+		} catch (java.util.regex.PatternSyntaxException e) {
+			return;
+		}
+		sort.setRowFilter(rowFilter);
 	}
 		
 	public void removeTab (int type)
