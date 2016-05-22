@@ -170,6 +170,24 @@ public class ConnectionDB
 		
 		
 	}
+	protected boolean chekUserID(Connection connection, String idUser) throws SQLException
+	{
+		boolean result = false;
+		String query = "SELECT `idUser` FROM zevsdb.users WHERE `idUser` = '"+idUser+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet Rset = preparedStatement.executeQuery();
+		while(Rset.next())
+		{
+			if(Rset.getString("idUser") != null)
+			{
+				result = true;
+			}
+			else
+				result = false;
+		}
+			
+		return result;
+	}
 	
 
 }

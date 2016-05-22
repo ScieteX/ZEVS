@@ -3,9 +3,11 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
+import zevs.authorization.registration.Registration;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
@@ -117,7 +119,7 @@ public class Workspace extends ConnectionDB {
 		}
 		highlighter = new DefaultHighlighter();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 733, 524);
+		frame.setBounds(100, 100, 855, 639);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -419,7 +421,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		internalFrame.setResizable(true);
 		internalFrame.setMaximizable(true);
 		internalFrame.setIconifiable(true);
-		internalFrame.setBounds(0, 0, 319, 33);
+		internalFrame.setBounds(0, 0, 334, 39);
 		desktopPane.add(internalFrame);
 		internalFrame.getContentPane().setLayout(new MigLayout("", "[508px,grow]", "[244px,grow]"));
 		
@@ -433,7 +435,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel = new JPanel();
 		splitPane.setLeftComponent(panel);
-		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][44.00,grow]"));
+		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][257.00,grow]"));
 		
 		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
 		panel.add(label, "cell 0 0,alignx trailing");
@@ -487,29 +489,56 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		
 		JPanel panel_1 = new JPanel();
 		splitPane.setRightComponent(panel_1);
-		panel_1.setLayout(new MigLayout("", "[grow][][][]", "[][][][][][][][][][][][][][][]"));
+		panel_1.setLayout(new MigLayout("", "[319.00][][][][][grow][grow][][][]", "[][][][][][][]"));
 		
 		JLabel lblIduser = new JLabel("idUser:");
 		panel_1.add(lblIduser, "flowx,cell 0 0");
 		
-		JButton button_1 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(textField_4.getText().equals(""))
-				{
-					InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
-					UpdateTable();
-					clearTextField();
-				}
-				else
-				{
-				InsertDataUser(connectionAdmin, textField_4.getText(), textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
-				UpdateTable();
-				clearTextField();
-				}
-			}
-		});
-		panel_1.add(button_1, "cell 1 0");
+		JLabel lblName = new JLabel("Name:");
+		panel_1.add(lblName, "cell 1 0");
+		
+		textField_4 = new JTextField();
+		panel_1.add(textField_4, "cell 0 1,growx");
+		textField_4.setColumns(10);
+		
+		textField_7 = new JTextField();
+		panel_1.add(textField_7, "cell 1 1 9 1,growx");
+		textField_7.setColumns(10);
+		
+		JLabel lblLogin = new JLabel("Login:");
+		panel_1.add(lblLogin, "cell 0 2");
+		
+		JLabel lblNewLabel = new JLabel("Surname:");
+		panel_1.add(lblNewLabel, "cell 1 2");
+		
+		textField_5 = new JTextField();
+		panel_1.add(textField_5, "cell 0 3,growx");
+		textField_5.setColumns(10);
+		
+		textField_8 = new JTextField();
+		panel_1.add(textField_8, "cell 1 3 9 1,growx");
+		textField_8.setColumns(10);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		panel_1.add(lblPassword, "cell 0 4");
+		
+		JLabel lblPatronymic = new JLabel("Patronymic:");
+		panel_1.add(lblPatronymic, "cell 1 4");
+		
+		textField_6 = new JTextField();
+		panel_1.add(textField_6, "cell 0 5,growx");
+		textField_6.setColumns(10);
+		
+		textField_9 = new JTextField();
+		panel_1.add(textField_9, "cell 1 5 9 1,growx");
+		textField_9.setColumns(10);
+		
+		JLabel lblType = new JLabel("Type:");
+		panel_1.add(lblType, "flowx,cell 0 6");
+		
+		comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"user", "admin"}));
+		panel_1.add(comboBox, "cell 0 6,alignx left");
 		
 		final JButton button = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
 		button.addActionListener(new ActionListener() {
@@ -521,6 +550,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					deleteUser(connectionAdmin, id);
 					UpdateTable();
 					JOptionPane.showMessageDialog(button, "Выбранный пользователь успешно удален.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+					clearTextField();
 				}
 				else 
 				{
@@ -528,56 +558,50 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				}
 			}
 		});
-		panel_1.add(button, "cell 2 0");
+		
+		final JButton button_1 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String text = textField_4.getText();
+					if(chekUserID(connectionAdmin, text) == false)
+					{
+						if(checkLoginPass(connectionAdmin, textField_5.getText(), false, false) == null)
+						{
+					if(text.equals(""))
+					{
+						InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
+						UpdateTable();
+						JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+						clearTextField();
+					}
+					else
+					{
+					InsertDataUser(connectionAdmin, text, textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
+					UpdateTable();
+					JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+					clearTextField();
+					}
+						}
+						else
+							JOptionPane.showMessageDialog(button_1,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
+					}
+					else
+						JOptionPane.showMessageDialog(button_1, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (HeadlessException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		panel_1.add(button_1, "flowx,cell 7 6");
+		panel_1.add(button, "cell 8 6,alignx right");
 		
 		JButton button_2 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
-		panel_1.add(button_2, "cell 3 0,alignx right");
-		
-		textField_4 = new JTextField();
-		panel_1.add(textField_4, "cell 0 1 4 1,growx");
-		textField_4.setColumns(10);
-		
-		JLabel lblLogin = new JLabel("Login:");
-		panel_1.add(lblLogin, "cell 0 2");
-		
-		textField_5 = new JTextField();
-		panel_1.add(textField_5, "cell 0 3 4 1,growx");
-		textField_5.setColumns(10);
-		
-		JLabel lblPassword = new JLabel("Password:");
-		panel_1.add(lblPassword, "cell 0 4");
-		
-		textField_6 = new JTextField();
-		panel_1.add(textField_6, "cell 0 5 4 1,growx");
-		textField_6.setColumns(10);
-		
-		JLabel lblName = new JLabel("Name:");
-		panel_1.add(lblName, "cell 0 6");
-		
-		textField_7 = new JTextField();
-		panel_1.add(textField_7, "cell 0 7 4 1,growx");
-		textField_7.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("Surname:");
-		panel_1.add(lblNewLabel, "cell 0 8");
-		
-		textField_8 = new JTextField();
-		panel_1.add(textField_8, "cell 0 9 4 1,growx");
-		textField_8.setColumns(10);
-		
-		JLabel lblPatronymic = new JLabel("Patronymic:");
-		panel_1.add(lblPatronymic, "cell 0 10");
-		
-		textField_9 = new JTextField();
-		panel_1.add(textField_9, "cell 0 11 4 1,growx");
-		textField_9.setColumns(10);
-		
-		JLabel lblType = new JLabel("Type:");
-		panel_1.add(lblType, "cell 0 12");
-		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"user", "admin"}));
-		panel_1.add(comboBox, "cell 0 13,alignx left");
+		panel_1.add(button_2, "cell 9 6,alignx right");
 		
 	}
 	protected void UpdateTable()
