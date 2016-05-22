@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -43,10 +44,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 import jess.JessException;
 import jess.Rete;
@@ -63,6 +60,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 
@@ -106,7 +106,7 @@ public class Workspace extends ConnectionDB {
 		}
 		highlighter = new DefaultHighlighter();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 569, 397);
+		frame.setBounds(100, 100, 733, 524);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -402,6 +402,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void UserInternalFrame()
 	{
 		JInternalFrame internalFrame = new JInternalFrame("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
+		//internalFrame.setMaximum(true);
 		internalFrame.setVisible(true);
 		internalFrame.setClosable(true);
 		internalFrame.setResizable(true);
@@ -411,20 +412,23 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		desktopPane.add(internalFrame);
 		internalFrame.getContentPane().setLayout(new MigLayout("", "[508px,grow]", "[244px,grow]"));
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		internalFrame.getContentPane().add(scrollPane_1, "cell 0 0,grow");
+		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setContinuousLayout(true);
+		scrollPane_1.setViewportView(splitPane);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		internalFrame.getContentPane().add(splitPane, "cell 0 0,grow");
 		
 		JPanel panel = new JPanel();
 		splitPane.setLeftComponent(panel);
-		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][146.00,grow]"));
+		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][44.00,grow]"));
 		
 		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
 		panel.add(label, "cell 0 0,alignx trailing");
 		
 		textField_3 = new JTextField();
-		panel.add(textField_3, "cell 1 0,grow");
+		panel.add(textField_3, "cell 1 0 2 1,grow");
 		textField_3.setColumns(10);
 		textField_3.getDocument().addDocumentListener(new DocumentListener() {
 			
@@ -441,83 +445,134 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			}
 		});
 		
-		final JSpinner spinner = new JSpinner();
-		spinner.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-			   String data = spinner.getValue().toString();
-			   int answ = JOptionPane.showConfirmDialog(spinner, "Вы уверены что хотите уделить пользователя с ID = "+data+"?","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
-			   if(answ == JOptionPane.YES_OPTION)
-			   {
-				   deleteUser(connectionAdmin, data);
-			   }else
-				   return;
-			}
-		});
-		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-		panel.add(spinner, "cell 2 0,grow");
-		
 		JButton btnNewButton_6 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
 			}
 		});
-		panel.add(btnNewButton_6, "cell 3 0");
-		
-		JButton btnNewButton_7 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
-		btnNewButton_7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		panel.add(btnNewButton_7, "cell 4 0");
+		panel.add(btnNewButton_6, "cell 3 0 2 1");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, "cell 0 1 5 1,grow");
 		try {
-			sort = new TableRowSorter(getUserData(connectionUser));
 			table = new JTable(getUserData(connectionUser));
-			table.setRowSorter(sort);
-			final JComboBox userAdminCombo = new JComboBox();
-			userAdminCombo.addItem("user");
-			userAdminCombo.addItem("admin");
-			TableColumn tableColumn = table.getColumnModel().getColumn(6);
-			tableColumn.setCellEditor(new DefaultCellEditor(userAdminCombo));
-			table.getModel().addTableModelListener(new TableModelListener() {
-				public void tableChanged(TableModelEvent event) {
-					int row = event.getFirstRow();
-					int column = event.getColumn();
-					int ans = 0;
-					if(column == 6)
-					ans = JOptionPane.showConfirmDialog(userAdminCombo,"Вы уверены в замене?","Предупреждение!!!", JOptionPane.YES_NO_OPTION);
-					if(ans == JOptionPane.YES_OPTION)
-					{
-					TableModel tableModel = (TableModel) event.getSource();
-					System.out.println(tableModel.getValueAt(row, column));
-					}
-					else
-					{
-						System.out.println("No Way");
-					}
-				}
-			});
-		} catch (SQLException e) {
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+			  int selRow = table.getSelectedRow();
+			  textField_4.setText(table.getModel().getValueAt(selRow, 0).toString());
+			  textField_5.setText(table.getModel().getValueAt(selRow, 1).toString());
+			  textField_6.setText(table.getModel().getValueAt(selRow, 2).toString());
+			  textField_7.setText(table.getModel().getValueAt(selRow, 3).toString());
+			  textField_8.setText(table.getModel().getValueAt(selRow, 4).toString());
+			  textField_9.setText(table.getModel().getValueAt(selRow, 5).toString());
+			  if(table.getModel().getValueAt(selRow, 6).equals("admin"))
+			  {
+				  comboBox.setModel(new DefaultComboBoxModel(new String []{"admin","user"}));
+			  }
+			  else
+				  comboBox.setModel(new DefaultComboBoxModel(new String []{"user","admin"}));
+			}
+		});
+		table.setRowSorter(sort);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
 		splitPane.setRightComponent(panel_1);
-		panel_1.setLayout(new MigLayout("", "[grow]", "[][grow]"));
+		panel_1.setLayout(new MigLayout("", "[grow][][][]", "[][][][][][][][][][][][][][][]"));
 		
-		JLabel lblNewLabel_2 = new JLabel("\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442:");
-		panel_1.add(lblNewLabel_2, "cell 0 0");
+		JLabel lblIduser = new JLabel("idUser:");
+		panel_1.add(lblIduser, "flowx,cell 0 0");
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_1.add(scrollPane_1, "cell 0 1,grow");
+		JButton button_1 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(textField_4.getText().equals(""))
+				{
+					InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
+				}
+				else
+				InsertDataUser(connectionAdmin, textField_4.getText(), textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
+			}
+		});
+		panel_1.add(button_1, "cell 1 0");
 		
-		JTextArea textArea_2 = new JTextArea();
-		scrollPane_1.setViewportView(textArea_2);
+		final JButton button = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String id = textField_4.getText();
+				int ans = JOptionPane.showConfirmDialog(button, "Вы уверены что хотите удалить пользователя с idUser = "+id+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+				if(ans == JOptionPane.YES_OPTION)
+				{
+					deleteUser(connectionAdmin, id);
+					JOptionPane.showMessageDialog(button, "Выбранный пользователь успешно удален.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else 
+				{
+					return;
+				}
+			}
+		});
+		panel_1.add(button, "cell 2 0");
+		
+		JButton button_2 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+		panel_1.add(button_2, "cell 3 0,alignx right");
+		
+		textField_4 = new JTextField();
+		panel_1.add(textField_4, "cell 0 1 4 1,growx");
+		textField_4.setColumns(10);
+		
+		JLabel lblLogin = new JLabel("Login:");
+		panel_1.add(lblLogin, "cell 0 2");
+		
+		textField_5 = new JTextField();
+		panel_1.add(textField_5, "cell 0 3 4 1,growx");
+		textField_5.setColumns(10);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		panel_1.add(lblPassword, "cell 0 4");
+		
+		textField_6 = new JTextField();
+		panel_1.add(textField_6, "cell 0 5 4 1,growx");
+		textField_6.setColumns(10);
+		
+		JLabel lblName = new JLabel("Name:");
+		panel_1.add(lblName, "cell 0 6");
+		
+		textField_7 = new JTextField();
+		panel_1.add(textField_7, "cell 0 7 4 1,growx");
+		textField_7.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Surname:");
+		panel_1.add(lblNewLabel, "cell 0 8");
+		
+		textField_8 = new JTextField();
+		panel_1.add(textField_8, "cell 0 9 4 1,growx");
+		textField_8.setColumns(10);
+		
+		JLabel lblPatronymic = new JLabel("Patronymic:");
+		panel_1.add(lblPatronymic, "cell 0 10");
+		
+		textField_9 = new JTextField();
+		panel_1.add(textField_9, "cell 0 11 4 1,growx");
+		textField_9.setColumns(10);
+		
+		JLabel lblType = new JLabel("Type:");
+		panel_1.add(lblType, "cell 0 12");
+		
+		comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"user", "admin"}));
+		panel_1.add(comboBox, "cell 0 13,alignx left");
+		
+		try {
+			sort = new TableRowSorter(getUserData(connectionUser));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	protected void Filt()
@@ -584,6 +639,13 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	private JPasswordField passwordField;
 	private JTextField textField_3;
 	private JTable table;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	private 	JComboBox comboBox;
 	public void killThread()
 	{
 		isRun = false;

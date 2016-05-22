@@ -113,7 +113,7 @@ public class Registration  extends JDialog  {
                         if(connectionDB.checkLoginPass(connection, textField_3.getText(), false, false) == null)
                         {
                         	if(passwordField.getText().equals(passwordField_1.getText()) == true)
-                        		connectionDB.InsertData(connection, textField_3.getText(), passwordField.getText(), textField.getText(), textField_1.getText(), textField_2.getText(), Type);
+                        		connectionDB.InsertDataUser(connection, null, textField_3.getText(), passwordField.getText(), textField.getText(), textField_1.getText(), textField_2.getText(), Type,0);
                         	else {
                         		 JOptionPane.showMessageDialog(Registration.this,"Пароли не совпадают","Ошибка",JOptionPane.ERROR_MESSAGE);
                         		 return;

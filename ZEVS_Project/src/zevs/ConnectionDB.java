@@ -20,10 +20,19 @@ public class ConnectionDB
 	public final String pass = "1357905ZEVSAC121";
 	protected final String URL = "jdbc:mysql://localhost:3306/zevsdb"; 
 	
-	public void InsertData(Connection connection, String Login, String Password, String Name, String Surname, String Patronymic, String Type)
+	public void InsertDataUser(Connection connection,String idUser, String Login, String Password, String Name, String Surname, String Patronymic, String Type, int var)
 	{
+		String query = null;
 		try {
-			PreparedStatement insert = connection.prepareStatement("INSERT INTO `zevsdb`.`users` (`Login`, `Password`, `Name`, `Surname`, `Patronymic`, `Type`) VALUES ('"+Login+"', '"+Password+"', '"+Name+"', '"+Surname+"', '"+Patronymic+"', '"+Type+"')");
+			switch(var)
+			{
+			case 0:
+				query = "INSERT INTO `zevsdb`.`users` (`Login`, `Password`, `Name`, `Surname`, `Patronymic`, `Type`) VALUES ('"+Login+"', '"+Password+"', '"+Name+"', '"+Surname+"', '"+Patronymic+"', '"+Type+"')";
+			break;
+			case 1: query = "INSERT INTO `zevsdb`.`users` (`idUser`,`Login`, `Password`, `Name`, `Surname`, `Patronymic`, `Type`) VALUES ('"+idUser+"','"+Login+"', '"+Password+"', '"+Name+"', '"+Surname+"', '"+Patronymic+"', '"+Type+"')"; break;
+			}
+			
+			PreparedStatement insert = connection.prepareStatement(query);
 			insert.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -123,7 +132,13 @@ public class ConnectionDB
 		return resultString;
 	}
 	protected TableModel getUserData(Connection connection) throws SQLException
-	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idUser","Login","Password","Name","Surname","Patronymic","Type"},0);
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idUser","Login","Password","Name","Surname","Patronymic","Type"},0){
+		private static final long serialVersionUID = 1L;
+		 public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		
+	};
 	String query = "SELECT * FROM zevsdb.users";
 	PreparedStatement preparedStatement = connection.prepareStatement(query);
 	ResultSet result = preparedStatement.executeQuery();
