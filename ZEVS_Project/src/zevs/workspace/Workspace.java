@@ -3,8 +3,6 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
-import zevs.authorization.registration.Registration;
-
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -26,9 +24,6 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -39,20 +34,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
-import java.beans.PropertyVetoException;
-
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
-
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -191,7 +182,6 @@ public class Workspace extends ConnectionDB {
 						e.printStackTrace();
 					}
 					textArea.setCaretPosition(0);
-					
 				}
 			});
 		
@@ -279,11 +269,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Администрирование", null, panel_2, null);
 		panel_2.setLayout(new MigLayout("", "[][548px,grow]", "[][331px,grow]"));
-		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		panel_2.add(toolBar, "cell 0 0");
-		
 		btnNewButton_2 = new JButton("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
 		btnNewButton_2.setEnabled(false);
 		btnNewButton_2.addActionListener(new ActionListener() {
@@ -415,7 +403,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void UserInternalFrame()
 	{
 		JInternalFrame internalFrame = new JInternalFrame("\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438");
-		//internalFrame.setMaximum(true);
 		internalFrame.setVisible(true);
 		internalFrame.setClosable(true);
 		internalFrame.setResizable(true);
@@ -465,7 +452,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			table = new JTable(getUserData(connectionUser));
 			table.setRowSorter(sort);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		table.addMouseListener(new MouseAdapter() {
@@ -609,10 +595,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		try {
 			sort = new TableRowSorter(getUserData(connectionUser));
 			table.setModel(getUserData(connectionUser));
-			table.setRowSorter(sort);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			table.setRowSorter(sort);			
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -700,7 +685,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void setJessCode(String Name)
 	{
 		try {	
-		//System.out.println(getJessCode(connectionUser, Name));
 		rete.eval(getJessCode(connectionUser, Name));
 		rete.reset();	
 		} catch (JessException e) {
