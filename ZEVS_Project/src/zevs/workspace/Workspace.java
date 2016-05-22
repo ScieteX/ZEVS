@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -50,9 +51,7 @@ import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
@@ -61,6 +60,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -94,6 +94,17 @@ public class Workspace extends ConnectionDB {
 	private JButton btnNewButton_4;
 	private JLabel lblNewLabel_1;
 	private Connection connectionAdmin;
+	private JTextField textField_2;
+	private JPasswordField passwordField;
+	private JTextField textField_3;
+	private JTable table;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	private JComboBox comboBox;
 	private TableRowSorter sort;
 		/**
 		 * @wbp.parser.entryPoint
@@ -428,7 +439,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel.add(label, "cell 0 0,alignx trailing");
 		
 		textField_3 = new JTextField();
-		panel.add(textField_3, "cell 1 0 2 1,grow");
+		panel.add(textField_3, "cell 1 0 4 1,grow");
 		textField_3.setColumns(10);
 		textField_3.getDocument().addDocumentListener(new DocumentListener() {
 			
@@ -445,18 +456,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			}
 		});
 		
-		JButton btnNewButton_6 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
-		btnNewButton_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
-		panel.add(btnNewButton_6, "cell 3 0 2 1");
-		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, "cell 0 1 5 1,grow");
 		try {
+			sort = new TableRowSorter(getUserData(connectionUser));
 			table = new JTable(getUserData(connectionUser));
+			table.setRowSorter(sort);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -478,7 +483,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				  comboBox.setModel(new DefaultComboBoxModel(new String []{"user","admin"}));
 			}
 		});
-		table.setRowSorter(sort);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
@@ -494,9 +498,15 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				if(textField_4.getText().equals(""))
 				{
 					InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
+					UpdateTable();
+					clearTextField();
 				}
 				else
+				{
 				InsertDataUser(connectionAdmin, textField_4.getText(), textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
+				UpdateTable();
+				clearTextField();
+				}
 			}
 		});
 		panel_1.add(button_1, "cell 1 0");
@@ -509,6 +519,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				if(ans == JOptionPane.YES_OPTION)
 				{
 					deleteUser(connectionAdmin, id);
+					UpdateTable();
 					JOptionPane.showMessageDialog(button, "Выбранный пользователь успешно удален.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else 
@@ -568,13 +579,28 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"user", "admin"}));
 		panel_1.add(comboBox, "cell 0 13,alignx left");
 		
+	}
+	protected void UpdateTable()
+	{
 		try {
 			sort = new TableRowSorter(getUserData(connectionUser));
+			table.setModel(getUserData(connectionUser));
+			table.setRowSorter(sort);
+			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+	protected void clearTextField()
+	{
+		textField_4.setText("");
+		textField_5.setText("");
+		textField_6.setText("");
+		textField_7.setText("");
+		textField_8.setText("");
+		textField_9.setText("");		
+	}
 	protected void Filt()
 	{
 		RowFilter  rowFilter = null;
@@ -635,17 +661,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		}
 	}){
 	};
-	private JTextField textField_2;
-	private JPasswordField passwordField;
-	private JTextField textField_3;
-	private JTable table;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
-	private JTextField textField_9;
-	private 	JComboBox comboBox;
+
 	public void killThread()
 	{
 		isRun = false;
