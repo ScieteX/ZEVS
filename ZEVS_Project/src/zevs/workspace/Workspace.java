@@ -746,7 +746,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	 }
 	public void step(int numb) throws BadLocationException
 	{
-		
         textArea.setHighlighter(highlighter);
 		if( numb < startText.size() && numb >= 0)
 		{
@@ -764,6 +763,5 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			step(step);
 			//search(Color.YELLOW);
 		}
-		
 	}
 	}
