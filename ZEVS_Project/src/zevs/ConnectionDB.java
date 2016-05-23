@@ -6,14 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-public class ConnectionDB 
+public class ConnectionDB extends CheckData
 {
 	protected final String driver = "com.mysql.jdbc.Driver";
 	public final String login = "ZevsUser";

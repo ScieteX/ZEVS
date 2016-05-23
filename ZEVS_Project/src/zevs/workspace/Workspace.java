@@ -3,6 +3,7 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
+
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -21,6 +22,7 @@ import java.awt.Font;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -34,16 +36,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
+
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -53,6 +58,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.DefaultComboBoxModel;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -587,6 +594,16 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(button, "cell 8 6,alignx right");
 		
 		JButton button_2 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(checkInputText(textField_4.getText(), 1))
+				{
+					System.out.println("OK");
+				}
+				else
+					System.out.println("NOOOOOOOOOOOOOOOO");
+			}
+		});
 		panel_1.add(button_2, "cell 9 6,alignx right");
 		
 	}
@@ -601,6 +618,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			e.printStackTrace();
 		}
 	}
+	
 	protected void clearTextField()
 	{
 		textField_4.setText("");
