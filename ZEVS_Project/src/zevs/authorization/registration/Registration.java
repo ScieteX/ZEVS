@@ -104,12 +104,24 @@ public class Registration  extends JDialog  {
 					public void actionPerformed(ActionEvent arg0) {
 					try {
 						Connection connection = connectionDB.getConnection(connectionDB.login, connectionDB.pass);
-						if(textField.getText().isEmpty() || textField_1.getText().isEmpty()  || textField_2.getText().isEmpty() || textField_3.getText().isEmpty()  || passwordField.getText().isEmpty() )
+						if(connectionDB.checkAllInputText(null, textField.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText(), passwordField.getText(), 1) == false)
 						{
 							JOptionPane.showMessageDialog(Registration.this,"Имеются незаполненные поля","Ошибка",JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 						else
+							if(connectionDB.checkInputText(textField.getText()+textField_1.getText()+textField_2.getText() , 2) == false)
+							{
+								 JOptionPane.showMessageDialog(Registration.this,"Введены недопустимые символы, возможно латиская буква или цифра","Ошибка",JOptionPane.ERROR_MESSAGE);
+								 return;
+							}
+							else
+								if(connectionDB.checkInputText(textField_3.getText()+passwordField.getText() , 1) == false)
+								{
+									JOptionPane.showMessageDialog(Registration.this,"Введены недопустимые символы, возможно кириллические буквы.\n Минимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+						else 							
                         if(connectionDB.checkLoginPass(connection, textField_3.getText(), false, false) == null)
                         {
                         	if(passwordField.getText().equals(passwordField_1.getText()) == true)

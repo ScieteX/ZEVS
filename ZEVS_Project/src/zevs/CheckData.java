@@ -3,7 +3,7 @@ package zevs;
 import java.util.regex.Matcher;
 
 public class CheckData {
-	protected boolean checkInputText(String text, int type)
+	public boolean checkInputText(String text, int type)
 	{
 		String pattern = null;
 		java.util.regex.Pattern p = null;
@@ -26,6 +26,35 @@ public class CheckData {
 		Matcher matcher = p.matcher(text);
 		
 		return matcher.find();
+	}
+	public boolean checkAllInputText(String text1, String text2, String text3, String text4, String text5, String text6, int type)
+	{
+		boolean result = false;
+		switch(type)
+		{
+		//idUser available
+		case 0: 
+			if(text1.isEmpty() || text2.isEmpty() || text3.isEmpty() || text4.isEmpty() || text5.isEmpty() || text6.isEmpty())
+			{
+				result = false;
+			}
+			else {
+				result = true;
+				}
+			break;
+		//idUser not available
+		case 1: 
+			if(text2.isEmpty() || text3.isEmpty() || text4.isEmpty() || text5.isEmpty() || text6.isEmpty())
+			{
+				result = false;
+			}
+			else {
+				result = true;
+				}
+			break;
+		}
+		
+		return result;
 		
 	}
 }
