@@ -52,6 +52,15 @@ public class CheckData {
 				result = true;
 				}
 			break;
+			case 2:
+				if(text3.isEmpty() || text4.isEmpty() || text5.isEmpty() || text6.isEmpty())
+				{
+					result = false;
+				}
+				else {
+					result = true;
+					}
+			break;
 		}
 		
 		return result;

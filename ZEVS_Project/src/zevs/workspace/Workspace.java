@@ -3,53 +3,41 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
-import zevs.authorization.registration.Registration;
-
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
 import net.miginfocom.swing.MigLayout;
-
 import javax.swing.JTextArea;
-
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.GraphicsEnvironment;
-
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import jess.JessException;
 import jess.Rete;
 import jess.awt.TextReader;
 import jess.swing.JTextAreaWriter;
-
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -59,13 +47,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.DefaultComboBoxModel;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-
 
 public class Workspace extends ConnectionDB {
 
@@ -106,6 +89,9 @@ public class Workspace extends ConnectionDB {
 	private JTextField textField_8;
 	private JTextField textField_9;
 	private JComboBox comboBox;
+	private String varId = null;
+	private String LoginU = null;
+	private JButton button_2;
 	private TableRowSorter sort;
 		/**
 		 * @wbp.parser.entryPoint
@@ -465,7 +451,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 			  int selRow = table.getSelectedRow();
-			  textField_4.setText(table.getModel().getValueAt(selRow, 0).toString());
+			  varId = table.getModel().getValueAt(selRow, 0).toString();
+			  LoginU = table.getModel().getValueAt(selRow, 1).toString();
+	          textField_4.setText(table.getModel().getValueAt(selRow, 0).toString());
 			  textField_5.setText(table.getModel().getValueAt(selRow, 1).toString());
 			  textField_6.setText(table.getModel().getValueAt(selRow, 2).toString());
 			  textField_7.setText(table.getModel().getValueAt(selRow, 3).toString());
@@ -477,6 +465,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			  }
 			  else
 				  comboBox.setModel(new DefaultComboBoxModel(new String []{"user","admin"}));
+			  button_2.setEnabled(true);
 			}
 		});
 		scrollPane.setViewportView(table);
@@ -538,13 +527,42 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String id = textField_4.getText();
-				int ans = JOptionPane.showConfirmDialog(button, "Вы уверены что хотите удалить пользователя с idUser = "+id+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+				int ans;
+				if(id.isEmpty())
+				{
+					JOptionPane.showMessageDialog(button,"Поле idUser пустое.","Ошибка",JOptionPane.ERROR_MESSAGE);
+				return;
+				}
+				else
+				ans = JOptionPane.showConfirmDialog(button, "Вы уверены что хотите удалить пользователя с idUser = "+id+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
 				if(ans == JOptionPane.YES_OPTION)
 				{
-					deleteUser(connectionAdmin, id);
-					UpdateTable();
-					JOptionPane.showMessageDialog(button, "Выбранный пользователь успешно удален.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
-					clearTextField();
+					if(checkInputText(id, 0) == false)
+					{
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						button_2.setEnabled(false);
+						return;
+					} else
+						try {
+							if(chekUserID(connectionAdmin, id) == true)
+							{
+							deleteUser(connectionAdmin, id);
+							UpdateTable();
+							JOptionPane.showMessageDialog(button, "Выбранный пользователь успешно удален.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+							clearTextField();
+							button_2.setEnabled(false);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(button,"Пользователя с ввведенным idUser = "+id+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								button_2.setEnabled(false);
+								return;
+							}
+						} catch (HeadlessException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 				}
 				else 
 				{
@@ -557,24 +575,85 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CheckInsertUserInputData(button_1);
+				button_2.setEnabled(false);
 			}
 		});
 		panel_1.add(button_1, "flowx,cell 7 6");
 		panel_1.add(button, "cell 8 6,alignx right");
 		
-		JButton button_2 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+		button_2 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+		button_2.setEnabled(false);
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(checkInputText(textField_4.getText(), 1))
-				{
-					System.out.println("OK");
-				}
-				else
-					System.out.println("NOOOOOOOOOOOOOOOO");
+				CheckUpdateUserInputData(button_2);
 			}
 		});
 		panel_1.add(button_2, "cell 9 6,alignx right");
 		
+	}
+	protected void CheckUpdateUserInputData(JButton button)
+	{
+		try {
+			String text = textField_4.getText();
+			if(checkAllInputText("", "", textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), 2) == false)
+			{
+				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idUser может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else
+				if(checkInputText(textField_7.getText()+textField_8.getText()+textField_9.getText() , 2) == false)
+				{
+					 JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно латиская буква или цифра","Ошибка",JOptionPane.ERROR_MESSAGE);
+					 return;
+				}
+				else
+					if(checkInputText(textField_5.getText()+textField_6.getText() , 1) == false)
+					{
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\n Минимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+			else 
+			if(chekUserID(connectionAdmin, text) == false)
+			{
+				if(checkLoginPass(connectionAdmin, textField_5.getText(), false, false) == null)
+				{
+			if(text.isEmpty() || textField_5.getText().isEmpty())
+			{
+				UpdateDataUser(connectionAdmin, varId, LoginU, textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),varId);	
+				UpdateTable();
+				JOptionPane.showMessageDialog(button, "Данные успешно изменены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+				clearTextField();
+				button_2.setEnabled(false);
+				return;
+			}
+			else
+				if(checkInputText(text, 0) == false)
+				{
+					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				else
+			{
+			UpdateDataUser(connectionAdmin, text, textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),varId);
+			UpdateTable();
+			JOptionPane.showMessageDialog(button, "Данные успешно изменены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+			clearTextField();
+			button_2.setEnabled(false);
+			return;
+			}
+				}
+				else
+					JOptionPane.showMessageDialog(button,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
+			}
+			else
+				JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	protected void CheckInsertUserInputData(JButton button)
 	{
