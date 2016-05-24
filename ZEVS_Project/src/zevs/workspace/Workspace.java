@@ -1,7 +1,6 @@
 package zevs.workspace;
 
 import javax.swing.JFrame;
-
 import zevs.ConnectionDB;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -296,7 +295,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		desktopPane = new JDesktopPane();
 		desktopPane.setBackground(Color.WHITE);
 		panel_2.add(desktopPane, "cell 0 1 2 1,grow");
-		final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
+		/*final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
 		internalFrame.setBounds(10, 61, 424, 166);
 		desktopPane.add(internalFrame);
 		internalFrame.getContentPane().setLayout(new MigLayout("", "[][408px,grow]", "[14px][][][][]"));
@@ -361,11 +360,11 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			}
 		});
 		internalFrame.getContentPane().add(btnNewButton_5, "cell 1 4,alignx right");
-		internalFrame.setVisible(true);
+		internalFrame.setVisible(true);*/
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
-		UserInternalFrame();
-	//	InformationInternalFrame();
+	//	UserInternalFrame();
+		InformationInternalFrame();
 	//	FactsRulesInternalFrame();
 		frame.setVisible(true);
 		runJessCode.start();
@@ -386,6 +385,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		protected void InformationInternalFrame()
 		{
 			JInternalFrame internalFrame_1 = new JInternalFrame("\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F");
+			//internalFrame_1.setMaximum(true);
 			internalFrame_1.setClosable(true);
 			internalFrame_1.setIconifiable(true);
 			internalFrame_1.setMaximizable(true);
@@ -393,6 +393,67 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			internalFrame_1.setBounds(0, 33, 319, 33);
 			internalFrame_1.setVisible(true);
 			desktopPane.add(internalFrame_1);
+			internalFrame_1.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
+			
+			JScrollPane scrollPane = new JScrollPane();
+			internalFrame_1.getContentPane().add(scrollPane, "cell 0 0,grow");
+			
+			JSplitPane splitPane = new JSplitPane();
+			scrollPane.setViewportView(splitPane);
+			splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+			
+			JPanel panel = new JPanel();
+			splitPane.setLeftComponent(panel);
+			panel.setLayout(new MigLayout("", "[][grow]", "[][154.00,grow]"));
+			
+			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+			panel.add(label, "cell 0 0,alignx trailing");
+			
+			textField_10 = new JTextField();
+			panel.add(textField_10, "cell 1 0,growx");
+			textField_10.setColumns(10);
+			
+			JScrollPane scrollPane_1 = new JScrollPane();
+			panel.add(scrollPane_1, "cell 0 1 2 1,grow");
+			
+			table_1 = new JTable();
+			scrollPane_1.setViewportView(table_1);
+			
+			JPanel panel_1 = new JPanel();
+			splitPane.setRightComponent(panel_1);
+			panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
+			
+			JLabel lblNewLabel_2 = new JLabel("idTextdata:");
+			panel_1.add(lblNewLabel_2, "cell 0 0,alignx trailing");
+			
+			textField_11 = new JTextField();
+			panel_1.add(textField_11, "flowx,cell 1 0,alignx left");
+			textField_11.setColumns(10);
+			
+			JLabel lblNewLabel_3 = new JLabel("Name:");
+			panel_1.add(lblNewLabel_3, "cell 1 0");
+			
+			textField_12 = new JTextField();
+			panel_1.add(textField_12, "cell 1 0,growx");
+			textField_12.setColumns(10);
+			
+			JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+			panel_1.add(button, "cell 2 0");
+			
+			JButton button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+			panel_1.add(button_3, "cell 3 0");
+			
+			JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+			panel_1.add(button_1, "cell 4 0");
+			
+			JLabel lblNewLabel_4 = new JLabel("Text:");
+			panel_1.add(lblNewLabel_4, "cell 0 1");
+			
+			JScrollPane scrollPane_2 = new JScrollPane();
+			panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
+			
+			JTextArea textArea_2 = new JTextArea();
+			scrollPane_2.setViewportView(textArea_2);
 		}
 	protected void UserInternalFrame()
 	{
@@ -798,6 +859,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		}
 	}){
 	};
+	private JTextField textField_10;
+	private JTable table_1;
+	private JTextField textField_11;
+	private JTextField textField_12;
 
 	public void killThread()
 	{
