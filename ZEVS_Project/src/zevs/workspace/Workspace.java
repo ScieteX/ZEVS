@@ -3,6 +3,7 @@ package zevs.workspace;
 import javax.swing.JFrame;
 
 import zevs.ConnectionDB;
+import zevs.authorization.registration.Registration;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -555,39 +556,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		final JButton button_1 = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					String text = textField_4.getText();
-					if(chekUserID(connectionAdmin, text) == false)
-					{
-						if(checkLoginPass(connectionAdmin, textField_5.getText(), false, false) == null)
-						{
-					if(text.equals(""))
-					{
-						InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
-						UpdateTable();
-						JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
-						clearTextField();
-					}
-					else
-					{
-					InsertDataUser(connectionAdmin, text, textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
-					UpdateTable();
-					JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
-					clearTextField();
-					}
-						}
-						else
-							JOptionPane.showMessageDialog(button_1,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
-					}
-					else
-						JOptionPane.showMessageDialog(button_1, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} catch (HeadlessException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				CheckInsertUserInputData(button_1);
 			}
 		});
 		panel_1.add(button_1, "flowx,cell 7 6");
@@ -606,6 +575,68 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		});
 		panel_1.add(button_2, "cell 9 6,alignx right");
 		
+	}
+	protected void CheckInsertUserInputData(JButton button)
+	{
+		try {
+			String text = textField_4.getText();
+			if(checkAllInputText("", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), 1) == false)
+			{
+				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idUser может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else
+				if(checkInputText(textField_7.getText()+textField_8.getText()+textField_9.getText() , 2) == false)
+				{
+					 JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно латиская буква или цифра","Ошибка",JOptionPane.ERROR_MESSAGE);
+					 return;
+				}
+				else
+					if(checkInputText(textField_5.getText()+textField_6.getText() , 1) == false)
+					{
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\n Минимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+			else 
+			if(chekUserID(connectionAdmin, text) == false)
+			{
+				if(checkLoginPass(connectionAdmin, textField_5.getText(), false, false) == null)
+				{
+			if(text.isEmpty())
+			{
+				InsertDataUser(connectionAdmin, "", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),0);	
+				UpdateTable();
+				JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+				clearTextField();
+				return;
+			}
+			else
+				if(checkInputText(text, 0) == false)
+				{
+					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				else
+			{
+			InsertDataUser(connectionAdmin, text, textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), (String)comboBox.getSelectedItem(),1);
+			UpdateTable();
+			JOptionPane.showMessageDialog(button, "Новый пользователь успешно добавлен.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+			clearTextField();
+			return;
+			}
+				}
+				else
+					JOptionPane.showMessageDialog(button,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
+			}
+			else
+				JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	protected void UpdateTable()
 	{
