@@ -481,7 +481,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					else
 					if(id.isEmpty())
 					{
-					InsertTextData(connectionAdmin, null, name, checkApostrophe(text), 0);
+					InsertTextData(connectionAdmin, null, checkApostrophe(name), checkApostrophe(text), 0);
 					JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
 					clearTextField();
 					UpdateTableInform();
@@ -492,7 +492,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							{
 							if(chekInformationDataID(connectionAdmin, id) == false)
                                {
-                            InsertTextData(connectionAdmin, id, name, checkApostrophe(text), 1);
+                            InsertTextData(connectionAdmin, id, checkApostrophe(name), checkApostrophe(text), 1);
                             JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             clearTextField();
                             UpdateTableInform();
@@ -520,14 +520,41 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			JButton button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
 			panel_1.add(button_3, "cell 3 0");
 			
-			JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+			final JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
 			button_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String text = textField_11.getText();
+					int ans;
+					ans = JOptionPane.showConfirmDialog(button_1, "Вы уверены что хотите удалить запись с idTextdata = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+					if(ans == JOptionPane.YES_OPTION)
+					{
 					if(checkInputText(text, 0) == true)
 					{
-						
+						try {
+							if(chekInformationDataID(connectionAdmin, text) == true)
+							{
+								deleteTextData(connectionAdmin, text);
+								UpdateTableInform();
+								JOptionPane.showMessageDialog(button_1, "Выбранные данные успешно удалены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+								clearTextField();
+								
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(button_1,"Данных с ввведенным idTextdata = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 					}
+					else
+					{
+						JOptionPane.showMessageDialog(button_1,"Некорректный ввод данных.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					}
+					else
+						return;
 				}
 			});
 			panel_1.add(button_1, "cell 4 0");
