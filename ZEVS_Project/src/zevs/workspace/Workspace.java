@@ -481,7 +481,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					else
 					if(id.isEmpty())
 					{
-					InsertTextData(connectionAdmin, null, name, text, 0);
+					InsertTextData(connectionAdmin, null, name, checkApostrophe(text), 0);
 					JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
 					clearTextField();
 					UpdateTableInform();
@@ -492,7 +492,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							{
 							if(chekInformationDataID(connectionAdmin, id) == false)
                                {
-                            InsertTextData(connectionAdmin, id, name, text, 1);
+                            InsertTextData(connectionAdmin, id, name, checkApostrophe(text), 1);
                             JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             clearTextField();
                             UpdateTableInform();
@@ -521,6 +521,15 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			panel_1.add(button_3, "cell 3 0");
 			
 			JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+			button_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String text = textField_11.getText();
+					if(checkInputText(text, 0) == true)
+					{
+						
+					}
+				}
+			});
 			panel_1.add(button_1, "cell 4 0");
 			
 			JLabel lblNewLabel_4 = new JLabel("Text:");
@@ -859,8 +868,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	{
 		try {
 			sortInfrom = new TableRowSorter(getInformationTextData(connectionUser));
-			table_1 = new JTable(getInformationTextData(connectionUser));
+			table_1.setModel(getInformationTextData(connectionUser));
 			table_1.setRowSorter(sortInfrom);
+			textArea_2.setText("");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

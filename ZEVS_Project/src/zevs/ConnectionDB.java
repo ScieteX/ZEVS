@@ -259,5 +259,22 @@ public class ConnectionDB extends CheckData
 			
 		return result;
 	}
-
+	
+    protected boolean deleteTextData(Connection connection, String idTextdata)
+    {
+    	boolean answer = false;
+		try {
+			PreparedStatement insert = connection.prepareStatement("DELETE FROM `zevsdb`.`textdata` WHERE `idTextdata`='"+idTextdata+"'");
+			insert.executeUpdate();
+			answer = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Delete Completed.");
+		}
+				
+		return answer;
+    }
 }
