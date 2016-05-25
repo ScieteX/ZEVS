@@ -94,6 +94,7 @@ public class Workspace extends ConnectionDB {
 	private TableRowSorter sort;
 	private TableRowSorter sortInfrom;
 	private JTextArea textArea_2;
+	private JButton button_3;
 		/**
 		 * @wbp.parser.entryPoint
 		 */
@@ -438,10 +439,13 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				table_1.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent arg0) {
 				    int Row = table_1.getRowSorter().convertRowIndexToModel(table_1.getSelectedRow());
+				    varId = table_1.getModel().getValueAt(Row, 0).toString();
 				      textField_11.setText(table_1.getModel().getValueAt(Row, 0).toString());
 					  textField_12.setText(table_1.getModel().getValueAt(Row, 1).toString());
 					  textArea_2.setText(table_1.getModel().getValueAt(Row, 2).toString());
 					  textArea_2.setCaretPosition(0);
+					  button_3.setEnabled(true);
+					  
 					}
 				});
 			} catch (SQLException e) {
@@ -485,6 +489,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
 					clearTextField();
 					UpdateTableInform();
+					button_3.setEnabled(false);
 					return;
 					} else
 						try {
@@ -496,6 +501,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
                             JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             clearTextField();
                             UpdateTableInform();
+                            button_3.setEnabled(false);
                                }
                          else {
                         	 JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -517,7 +523,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			});
 			panel_1.add(button, "cell 2 0");
 			
-			JButton button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+			button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+			button_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String idTextdata = textField_11.getText();
+					String Name = checkApostrophe(textField_12.getText());
+					String Text = checkApostrophe(textArea_2.getText());
+					
+					UpdateTextData(connectionAdmin, idTextdata, Name, Text, varId);
+				}
+			});
+			button_3.setEnabled(false);
 			panel_1.add(button_3, "cell 3 0");
 			
 			final JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
@@ -537,7 +553,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 								UpdateTableInform();
 								JOptionPane.showMessageDialog(button_1, "Выбранные данные успешно удалены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
 								clearTextField();
-								
+								button_3.setEnabled(false);
 							}
 							else
 							{
@@ -935,6 +951,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			return;
 		}
 		sort.setRowFilter(rowFilter);
+		button_2.setEnabled(false);
 	}
 	protected void FiltInform()
 	{
@@ -945,6 +962,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			return;
 		}
 		sortInfrom.setRowFilter(rowFilter);
+		button_3.setEnabled(false);
+		
 	}
 		
 	public void removeTab (int type)

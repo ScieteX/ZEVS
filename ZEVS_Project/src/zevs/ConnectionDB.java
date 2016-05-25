@@ -17,7 +17,22 @@ public class ConnectionDB extends CheckData
 	public final String pass = "1357905ZEVSAC121";
 	protected final String URL = "jdbc:mysql://localhost:3306/zevsdb"; 
 	
-	public void UpdateDataUser(Connection connection,String idUser, String Login, String Password, String Name, String Surname, String Patronymic, String Type, String varID)
+	protected void UpdateTextData(Connection connection,String idTextdata, String Name, String Text, String varID)
+	{
+		String query = null;
+		try {
+	query = "UPDATE `zevsdb`.`textdata` SET `idTextdata`='"+idTextdata+"', `Name`='"+Name+"', `Text`='"+Text+"', `Name`='"+Name+"' WHERE `idUser`='"+varID+"'";
+	PreparedStatement Update = connection.prepareStatement(query);
+	Update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Update Completed.");
+		}
+	}
+	protected void UpdateDataUser(Connection connection,String idUser, String Login, String Password, String Name, String Surname, String Patronymic, String Type, String varID)
 	{
 		String query = null;
 		try {
@@ -256,7 +271,6 @@ public class ConnectionDB extends CheckData
 			else
 				result = false;
 		}
-			
 		return result;
 	}
 	
