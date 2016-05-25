@@ -92,6 +92,8 @@ public class Workspace extends ConnectionDB {
 	private String LoginU = null;
 	private JButton button_2;
 	private TableRowSorter sort;
+	private TableRowSorter sortInfrom;
+	private JTextArea textArea_2;
 		/**
 		 * @wbp.parser.entryPoint
 		 */
@@ -295,7 +297,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		desktopPane = new JDesktopPane();
 		desktopPane.setBackground(Color.WHITE);
 		panel_2.add(desktopPane, "cell 0 1 2 1,grow");
-		/*final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
+		final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
 		internalFrame.setBounds(10, 61, 424, 166);
 		desktopPane.add(internalFrame);
 		internalFrame.getContentPane().setLayout(new MigLayout("", "[][408px,grow]", "[14px][][][][]"));
@@ -360,7 +362,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			}
 		});
 		internalFrame.getContentPane().add(btnNewButton_5, "cell 1 4,alignx right");
-		internalFrame.setVisible(true);*/
+		internalFrame.setVisible(true);
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
 	//	UserInternalFrame();
@@ -412,11 +414,39 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			textField_10 = new JTextField();
 			panel.add(textField_10, "cell 1 0,growx");
 			textField_10.setColumns(10);
-			
+			textField_10.getDocument().addDocumentListener(new DocumentListener() {
+				
+				public void removeUpdate(DocumentEvent arg0) {
+			         FiltInform();	
+				}
+				
+				public void insertUpdate(DocumentEvent arg0) {
+					FiltInform();
+				}
+				
+				public void changedUpdate(DocumentEvent arg0) {
+					FiltInform();					
+				}
+			});
 			JScrollPane scrollPane_1 = new JScrollPane();
 			panel.add(scrollPane_1, "cell 0 1 2 1,grow");
 			
-			table_1 = new JTable();
+			try {
+				sortInfrom = new TableRowSorter(getInformationTextData(connectionUser));
+				table_1 = new JTable(getInformationTextData(connectionUser));
+				table_1.setRowSorter(sortInfrom);
+				table_1.addMouseListener(new MouseAdapter() {
+					public void mouseClicked(MouseEvent arg0) {
+				    int Row = table_1.getRowSorter().convertRowIndexToModel(table_1.getSelectedRow());
+				      textField_11.setText(table_1.getModel().getValueAt(Row, 0).toString());
+					  textField_12.setText(table_1.getModel().getValueAt(Row, 1).toString());
+					  textArea_2.setText(table_1.getModel().getValueAt(Row, 2).toString());
+					  textArea_2.setCaretPosition(0);
+					}
+				});
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			scrollPane_1.setViewportView(table_1);
 			
 			JPanel panel_1 = new JPanel();
@@ -437,7 +467,54 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			panel_1.add(textField_12, "cell 1 0,growx");
 			textField_12.setColumns(10);
 			
-			JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+			final JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String id = textField_11.getText();
+					String name = textField_12.getText();
+					String text = textArea_2.getText();
+					if(name.isEmpty() || text.isEmpty())
+					{
+						JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idTextdata может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					return;
+					}
+					else
+					if(id.isEmpty())
+					{
+					InsertTextData(connectionAdmin, null, name, text, 0);
+					JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+					clearTextField();
+					UpdateTableInform();
+					return;
+					} else
+						try {
+							if(checkInputText(id, 0) == true)
+							{
+							if(chekInformationDataID(connectionAdmin, id) == false)
+                               {
+                            InsertTextData(connectionAdmin, id, name, text, 1);
+                            JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+                            clearTextField();
+                            UpdateTableInform();
+                               }
+                         else {
+                        	 JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+                        	 return;
+                          }
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+								
+						} catch (HeadlessException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+				}
+			});
 			panel_1.add(button, "cell 2 0");
 			
 			JButton button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
@@ -452,7 +529,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			JScrollPane scrollPane_2 = new JScrollPane();
 			panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
 			
-			JTextArea textArea_2 = new JTextArea();
+			textArea_2 = new JTextArea();
 			scrollPane_2.setViewportView(textArea_2);
 		}
 	protected void UserInternalFrame()
@@ -511,7 +588,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		}
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
-			  int selRow = table.getSelectedRow();
+			  int selRow = table.getRowSorter().convertRowIndexToModel(table.getSelectedRow());
 			  varId = table.getModel().getValueAt(selRow, 0).toString();
 			  LoginU = table.getModel().getValueAt(selRow, 1).toString();
 	          textField_4.setText(table.getModel().getValueAt(selRow, 0).toString());
@@ -778,6 +855,16 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			e.printStackTrace();
 		}
 	}
+	protected void UpdateTableInform()
+	{
+		try {
+			sortInfrom = new TableRowSorter(getInformationTextData(connectionUser));
+			table_1 = new JTable(getInformationTextData(connectionUser));
+			table_1.setRowSorter(sortInfrom);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	protected void UpdateTable()
 	{
 		try {
@@ -797,7 +884,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textField_6.setText("");
 		textField_7.setText("");
 		textField_8.setText("");
-		textField_9.setText("");		
+		textField_9.setText("");	
+		textField_10.setText("");
+		textField_11.setText("");
+		textField_12.setText("");
 	}
 	protected void Filt()
 	{
@@ -808,6 +898,16 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			return;
 		}
 		sort.setRowFilter(rowFilter);
+	}
+	protected void FiltInform()
+	{
+		RowFilter  rowFilter = null;
+		try {
+		rowFilter = RowFilter.regexFilter(textField_10.getText(), new int[]{});
+		} catch (java.util.regex.PatternSyntaxException e) {
+			return;
+		}
+		sortInfrom.setRowFilter(rowFilter);
 	}
 		
 	public void removeTab (int type)
@@ -825,7 +925,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected Thread runJessCode = new Thread(new Runnable() {
 		public void run() {
 			isRun = true;
-			System.out.println(runJessCode.currentThread().getId());
+			//System.out.println(runJessCode.currentThread().getId());
 			while(true)
 			{
 				try {

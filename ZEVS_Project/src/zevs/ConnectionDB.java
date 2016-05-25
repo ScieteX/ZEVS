@@ -29,7 +29,7 @@ public class ConnectionDB extends CheckData
 		}
 		finally
 		{
-			System.out.println("Insert Completed.");
+			System.out.println("Update Completed.");
 		}
 	}
 	public void InsertDataUser(Connection connection,String idUser, String Login, String Password, String Name, String Surname, String Patronymic, String Type, int var)
@@ -51,7 +51,7 @@ public class ConnectionDB extends CheckData
 		}
 		finally
 		{
-			System.out.println("Update Completed.");
+			System.out.println("Insert Completed.");
 		}
 	}
 	
@@ -200,6 +200,64 @@ public class ConnectionDB extends CheckData
 			
 		return result;
 	}
+	protected TableModel getInformationTextData(Connection connection) throws SQLException
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idTextdata","Name","Text"},0){
+		private static final long serialVersionUID = 1L;
+		 public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		
+	};
+	String query = "SELECT * FROM zevsdb.textdata";
+	PreparedStatement preparedStatement = connection.prepareStatement(query);
+	ResultSet result = preparedStatement.executeQuery();
+	while(result.next())
+	{
+		defaultTableModel.addRow(new Object[]{result.getString("idTextdata"),result.getString("Name"),result.getString("Text")});
+	}
+	return  defaultTableModel;
+	}
 	
+	protected void InsertTextData(Connection connection, String idTextdata, String Name, String Text, int var)
+	{
+		String query = null;
+		try {
+			switch(var)
+			{
+			case 0:
+				query = "INSERT INTO `zevsdb`.`textdata` (`Name`, `Text`) VALUES ('"+Name+"', '"+Text+"')";
+			break;
+			case 1: query = "INSERT INTO `zevsdb`.`textdata` (`idTextdata`,`Name`, `Text`) VALUES ('"+idTextdata+"','"+Name+"', '"+Text+"')"; break;
+			}
+			
+			PreparedStatement insert = connection.prepareStatement(query);
+			insert.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Insert Completed.");
+		}
+		
+	}
+	protected boolean chekInformationDataID(Connection connection, String idTextdata) throws SQLException
+	{
+		boolean result = false;
+		String query = "SELECT `idTextdata` FROM zevsdb.textdata WHERE `idTextdata` = '"+idTextdata+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet Rset = preparedStatement.executeQuery();
+		while(Rset.next())
+		{
+			if(Rset.getString("idTextdata") != null)
+			{
+				result = true;
+			}
+			else
+				result = false;
+		}
+			
+		return result;
+	}
 
 }
