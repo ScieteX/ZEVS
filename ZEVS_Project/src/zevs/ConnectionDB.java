@@ -215,6 +215,24 @@ public class ConnectionDB extends CheckData
 			
 		return result;
 	}
+	protected boolean chekJessID(Connection connection, String idJess) throws SQLException
+	{
+		boolean result = false;
+		String query = "SELECT `idJess` FROM zevsdb.jessdata WHERE `idJess` = '"+idJess+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet Rset = preparedStatement.executeQuery();
+		while(Rset.next())
+		{
+			if(Rset.getString("idJess") != null)
+			{
+				result = true;
+			}
+			else
+				result = false;
+		}
+			
+		return result;
+	}
 	protected TableModel getInformationTextData(Connection connection) throws SQLException
 	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idTextdata","Name","Text"},0){
 		private static final long serialVersionUID = 1L;

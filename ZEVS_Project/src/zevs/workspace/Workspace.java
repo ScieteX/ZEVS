@@ -96,6 +96,7 @@ public class Workspace extends ConnectionDB {
 	private TableRowSorter sortInfrom;
 	private TableRowSorter sortFR;
 	private JTextArea textArea_2;
+	private JTextArea textArea_3;
 	private JButton button_3;
 	private JButton button_1;
 		/**
@@ -380,6 +381,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		{
 			JInternalFrame internalFrame_2 = new JInternalFrame("\u0424\u0430\u043A\u0442\u044B/\u041F\u0440\u0430\u0432\u0438\u043B\u0430");
 			//internalFrame_2.setMaximum(true);
+			//internalFrame_2.setMaximum(true);
 			internalFrame_2.setClosable(true);
 			internalFrame_2.setIconifiable(true);
 			internalFrame_2.setMaximizable(true);
@@ -389,9 +391,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			desktopPane.add(internalFrame_2);
 			internalFrame_2.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
 			
+			JScrollPane scrollPane_1 = new JScrollPane();
+			internalFrame_2.getContentPane().add(scrollPane_1, "cell 0 0,grow");
+			
 			JSplitPane splitPane = new JSplitPane();
+			scrollPane_1.setViewportView(splitPane);
 			splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-			internalFrame_2.getContentPane().add(splitPane, "cell 0 0,grow");
 			
 			JPanel panel = new JPanel();
 			splitPane.setLeftComponent(panel);
@@ -406,79 +411,89 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			textField_13.getDocument().addDocumentListener(new DocumentListener() {
 				
 				public void removeUpdate(DocumentEvent arg0) {
-					
+					FiltFR();
 				}
 				
 				public void insertUpdate(DocumentEvent arg0) {
-					
+					FiltFR();
 				}
 				
 				public void changedUpdate(DocumentEvent arg0) {
-					
+					FiltFR();
 				}
 			});
 			JScrollPane scrollPane = new JScrollPane();
 			panel.add(scrollPane, "cell 0 1 2 1,grow");
 			try {
-				sortFR = new TableRowSorter(getJessTableData(connectionAdmin));
-			table_2 = new JTable(getJessTableData(connectionAdmin));
-			table_2.setRowSorter(sortFR);
+				sortFR = new TableRowSorter(getJessTableData(connectionUser));
+				table_2 = new JTable(getJessTableData(connectionUser));
+				table_2.setRowSorter(sortFR);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-	
-			table_2.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent arg0) {
+			
+					table_2.addMouseListener(new MouseAdapter() {
+						public void mouseClicked(MouseEvent arg0) {
+							int Row = table_2.getRowSorter().convertRowIndexToModel(table_2.getSelectedRow());
+						    varId = table_2.getModel().getValueAt(Row, 0).toString();
+						    nameTextData = table_2.getModel().getValueAt(Row, 1).toString();
+						      textField_14.setText(table_2.getModel().getValueAt(Row, 0).toString());
+							  textField_15.setText(table_2.getModel().getValueAt(Row, 1).toString());
+							  textArea_3.setText(table_2.getModel().getValueAt(Row, 2).toString());
+							  textArea_3.setCaretPosition(0);
+							  button_1.setEnabled(true);
+						}
+					});
+					scrollPane.setViewportView(table_2);
 					
-				}
-			});
-			scrollPane.setViewportView(table_2);
-			
-			JPanel panel_1 = new JPanel();
-			splitPane.setRightComponent(panel_1);
-			panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
-			
-			JLabel lblNewLabel_5 = new JLabel("idJess:");
-			panel_1.add(lblNewLabel_5, "flowx,cell 0 0");
-			
-			JLabel lblNewLabel_6 = new JLabel("Name:");
-			panel_1.add(lblNewLabel_6, "flowx,cell 1 0");
-			
-			textField_15 = new JTextField();
-			panel_1.add(textField_15, "cell 1 0,growx");
-			textField_15.setColumns(10);
-			
-			JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			panel_1.add(button, "cell 2 0");
-			
-			button_1 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
-			button_1.setEnabled(false);
-			button_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			panel_1.add(button_1, "cell 3 0");
-			
-			JButton button_4 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
-			button_4.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			panel_1.add(button_4, "cell 4 0");
-			
-			JLabel lblNewLabel_7 = new JLabel("JessCode:");
-			panel_1.add(lblNewLabel_7, "cell 0 1");
-			
-			JTextArea textArea_3 = new JTextArea();
-			panel_1.add(textArea_3, "cell 0 2 5 1,grow");
-			
-			textField_14 = new JTextField();
-			panel_1.add(textField_14, "cell 0 0,growx");
-			textField_14.setColumns(10);
+					JPanel panel_1 = new JPanel();
+					splitPane.setRightComponent(panel_1);
+					panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
+					
+					JLabel lblNewLabel_5 = new JLabel("idJess:");
+					panel_1.add(lblNewLabel_5, "flowx,cell 0 0");
+					
+					JLabel lblNewLabel_6 = new JLabel("Name:");
+					panel_1.add(lblNewLabel_6, "flowx,cell 1 0");
+					
+					textField_15 = new JTextField();
+					panel_1.add(textField_15, "cell 1 0,growx");
+					textField_15.setColumns(10);
+					
+					JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+					button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+						}
+					});
+					panel_1.add(button, "cell 2 0");
+					
+					button_1 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+					button_1.setEnabled(false);
+					button_1.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+						}
+					});
+					panel_1.add(button_1, "cell 3 0");
+					
+					JButton button_4 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+					button_4.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+						}
+					});
+					panel_1.add(button_4, "cell 4 0");
+					
+					JLabel lblNewLabel_7 = new JLabel("JessCode:");
+					panel_1.add(lblNewLabel_7, "cell 0 1");
+				    
+				    JScrollPane scrollPane_2 = new JScrollPane();
+				    panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
+					
+				    textArea_3 = new JTextArea();
+				    scrollPane_2.setViewportView(textArea_3);
+					
+					textField_14 = new JTextField();
+					panel_1.add(textField_14, "cell 0 0,growx");
+					textField_14.setColumns(10);
 			
 		}
 		protected void InformationInternalFrame()
