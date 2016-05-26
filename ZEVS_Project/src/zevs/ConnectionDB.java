@@ -17,6 +17,21 @@ public class ConnectionDB extends CheckData
 	public final String pass = "1357905ZEVSAC121";
 	protected final String URL = "jdbc:mysql://localhost:3306/zevsdb"; 
 	
+	protected void UpdateJessData(Connection connection, String idJess, String Name, String jessCode, String varID)
+	{
+		String query = null;
+		try {
+	query = "UPDATE `zevsdb`.`jessdata` SET `idJess`='"+idJess+"', `Name`='"+Name+"', `jessCode`='"+jessCode+"', `Name`='"+Name+"' WHERE `idJess`='"+varID+"'";
+	PreparedStatement Update = connection.prepareStatement(query);
+	Update.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Update Completed.");
+		}
+	}
 	protected void UpdateTextData(Connection connection,String idTextdata, String Name, String Text, String varID)
 	{
 		String query = null;
@@ -291,6 +306,29 @@ public class ConnectionDB extends CheckData
 		}
 		
 	}
+	protected void InsertJessData(Connection connection, String idJess, String Name, String JessCode, int var)
+	{
+		String query = null;
+		try {
+			switch(var)
+			{
+			case 0:
+				query = "INSERT INTO `zevsdb`.`jessdata` (`Name`, `JessCode`) VALUES ('"+Name+"', '"+JessCode+"')";
+			break;
+			case 1: query = "INSERT INTO `zevsdb`.`jessdata` (`idJess`,`Name`, `JessCode`) VALUES ('"+idJess+"','"+Name+"', '"+JessCode+"')"; break;
+			}
+			
+			PreparedStatement insert = connection.prepareStatement(query);
+			insert.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Insert Completed.");
+		}
+		
+	}
 	protected boolean chekInformationDataID(Connection connection, String idTextdata) throws SQLException
 	{
 		boolean result = false;
@@ -300,6 +338,23 @@ public class ConnectionDB extends CheckData
 		while(Rset.next())
 		{
 			if(Rset.getString("idTextdata") != null)
+			{
+				result = true;
+			}
+			else
+				result = false;
+		}
+		return result;
+	}
+	protected boolean chekJessData(Connection connection, String Name) throws SQLException
+	{
+		boolean result = false;
+		String query = "SELECT `Name` FROM zevsdb.jessdata WHERE `Name` = '"+Name+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet Rset = preparedStatement.executeQuery();
+		while(Rset.next())
+		{
+			if(Rset.getString("Name") != null)
 			{
 				result = true;
 			}
@@ -331,6 +386,23 @@ public class ConnectionDB extends CheckData
     	boolean answer = false;
 		try {
 			PreparedStatement insert = connection.prepareStatement("DELETE FROM `zevsdb`.`textdata` WHERE `idTextdata`='"+idTextdata+"'");
+			insert.executeUpdate();
+			answer = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("Delete Completed.");
+		}
+				
+		return answer;
+    }
+    protected boolean deleteJessData(Connection connection, String idJess)
+    {
+    	boolean answer = false;
+		try {
+			PreparedStatement insert = connection.prepareStatement("DELETE FROM `zevsdb`.`jessdata` WHERE `idJess`='"+idJess+"'");
 			insert.executeUpdate();
 			answer = true;
 		} catch (SQLException e) {

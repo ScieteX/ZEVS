@@ -370,9 +370,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		internalFrame.setVisible(true);
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
-	//	UserInternalFrame();
-	//InformationInternalFrame();
-		FactsRulesInternalFrame();
 		frame.setVisible(true);
 		runJessCode.start();
 		System.out.println(Thread.currentThread().getId());
@@ -380,13 +377,11 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		protected void FactsRulesInternalFrame()
 		{
 			JInternalFrame internalFrame_2 = new JInternalFrame("\u0424\u0430\u043A\u0442\u044B/\u041F\u0440\u0430\u0432\u0438\u043B\u0430");
-			//internalFrame_2.setMaximum(true);
-			//internalFrame_2.setMaximum(true);
 			internalFrame_2.setClosable(true);
 			internalFrame_2.setIconifiable(true);
 			internalFrame_2.setMaximizable(true);
 			internalFrame_2.setResizable(true);
-			internalFrame_2.setBounds(0, 69, 319, 33);
+			internalFrame_2.setBounds(0, 69, 334, 33);
 			internalFrame_2.setVisible(true);
 			desktopPane.add(internalFrame_2);
 			internalFrame_2.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -425,8 +420,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			JScrollPane scrollPane = new JScrollPane();
 			panel.add(scrollPane, "cell 0 1 2 1,grow");
 			try {
-				sortFR = new TableRowSorter(getJessTableData(connectionUser));
-				table_2 = new JTable(getJessTableData(connectionUser));
+				sortFR = new TableRowSorter(getJessTableData(connectionAdmin));
+				table_2 = new JTable(getJessTableData(connectionAdmin));
 				table_2.setRowSorter(sortFR);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -460,9 +455,74 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					panel_1.add(textField_15, "cell 1 0,growx");
 					textField_15.setColumns(10);
 					
-					JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+					final JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
 					button.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
+							String id = textField_14.getText();
+							String name = textField_15.getText();
+							String jessCode = textArea_3.getText();
+							if(name.isEmpty() || jessCode.isEmpty())
+							{
+								JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idJess может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+							return;
+							}
+							else
+							if(id.isEmpty())
+							{
+								try {
+									if (chekJessData(connectionAdmin, name) == false)
+									{
+		                InsertJessData(connectionAdmin, null, checkApostrophe(name), checkApostrophe(jessCode), 0);
+		                JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+		                clearTextField();
+		                UpdateTableFR();
+		                button_1.setEnabled(false);
+		                return;
+									}
+									else {
+										JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+										return;
+									}
+								} catch (HeadlessException e) {
+									e.printStackTrace();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+							} else
+								try {
+									if(checkInputText(id, 0) == true)
+									{
+									if(chekJessID(connectionAdmin, id) == false)
+		                               {
+										if (chekJessData(connectionAdmin, name) == false)
+										{
+		                            InsertJessData(connectionAdmin, id, checkApostrophe(name), checkApostrophe(jessCode), 1);
+		                            JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+		                            clearTextField();
+		                            UpdateTableFR();
+		                            button_1.setEnabled(false);
+										}
+										else {
+											JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+											return;
+										}
+		                               }
+		                         else {
+		                        	 JOptionPane.showMessageDialog(button, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		                        	 return;
+		                          }
+									}
+									else
+									{
+										JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idJess может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+										return;
+									}
+										
+								} catch (HeadlessException e) {
+									e.printStackTrace();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
 						}
 					});
 					panel_1.add(button, "cell 2 0");
@@ -471,13 +531,107 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					button_1.setEnabled(false);
 					button_1.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
+							String idTextdata = textField_14.getText();
+							String Name = checkApostrophe(textField_15.getText());
+							String jessCode = checkApostrophe(textArea_3.getText());
+							if(jessCode.isEmpty())
+							{
+								JOptionPane.showMessageDialog(button_1,"Имеются незаполненные поля.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								return;
+							} 
+							else
+								try {
+									if(idTextdata.isEmpty() == false && Name.isEmpty() == false)
+									if(chekJessID(connectionAdmin, idTextdata) == false)
+									{
+									if(chekJessData(connectionAdmin, Name) == false)
+									{
+		                           UpdateJessDATA(button_1,idTextdata, Name, jessCode);
+		                           return;
+									}
+									else
+									{
+										JOptionPane.showMessageDialog(button_1, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+			              	              return;
+									}
+									}
+		                       else {
+									JOptionPane.showMessageDialog(button_1, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		              	              return;
+		                              }
+									if(idTextdata.isEmpty() == false)
+									{
+										if(chekJessID(connectionAdmin, idTextdata) == false)
+										{
+											 UpdateJessDATA(button_3,idTextdata, nameTextData, jessCode);
+										}
+										else {
+											JOptionPane.showMessageDialog(button, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+				              	              return;
+										}
+									}
+									else
+										if(Name.isEmpty() == false)
+										{
+											if(chekJessData(connectionAdmin, Name) == false)
+											{
+				                           UpdateJessDATA(button_3,varId, Name, jessCode);
+											}
+											else
+											{
+												JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+					              	              return;
+											}
+										}
+									else
+										if(idTextdata.isEmpty() && Name.isEmpty())
+										{
+											  UpdateJessDATA(button_3,varId, nameTextData, jessCode);
+										}							
+								} catch (HeadlessException e) {
+									e.printStackTrace();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
 						}
 					});
 					panel_1.add(button_1, "cell 3 0");
 					
-					JButton button_4 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+					final JButton button_4 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
 					button_4.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
+							String text = textField_14.getText();
+							int ans;
+							ans = JOptionPane.showConfirmDialog(button_4, "Вы уверены что хотите удалить запись с idJess = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+							if(ans == JOptionPane.YES_OPTION)
+							{
+							if(checkInputText(text, 0) == true)
+							{
+								try {
+									if(chekJessID(connectionAdmin, text) == true)
+									{
+										deleteJessData(connectionAdmin, text);
+										UpdateTableFR();
+										JOptionPane.showMessageDialog(button_4, "Выбранные данные успешно удалены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+										clearTextField();
+										button_1.setEnabled(false);
+									}
+									else
+									{
+										JOptionPane.showMessageDialog(button_4,"Данных с ввведенным idJess = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+									}
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(button_4,"Некорректный ввод данных.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+							}
+							else
+								return;
 						}
 					});
 					panel_1.add(button_4, "cell 4 0");
@@ -504,7 +658,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			internalFrame_1.setIconifiable(true);
 			internalFrame_1.setMaximizable(true);
 			internalFrame_1.setResizable(true);
-			internalFrame_1.setBounds(0, 33, 319, 33);
+			internalFrame_1.setBounds(0, 33, 334, 33);
 			internalFrame_1.setVisible(true);
 			desktopPane.add(internalFrame_1);
 			internalFrame_1.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -972,6 +1126,15 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(button_2, "cell 9 6,alignx right");
 		
 	}
+	protected void UpdateJessDATA(JButton button, String id,String Name, String jessCode)
+	{
+		UpdateJessData(connectionAdmin, id, Name, jessCode, varId);
+        UpdateTableFR();
+        clearTextField();
+		JOptionPane.showMessageDialog(button, "Данные  успешно изменены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+		button_1.setEnabled(false);
+		return;
+	}
 	protected void UpdateTextDATA(JButton button, String id,String Name, String Text)
 	{
 		UpdateTextData(connectionAdmin, id, Name, Text, varId);
@@ -1107,6 +1270,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			e.printStackTrace();
 		}
 	}
+	protected void UpdateTableFR()
+	{
+		try {
+			sortFR = new TableRowSorter(getJessTableData(connectionAdmin));
+			table_2.setModel(getJessTableData(connectionAdmin));
+			table_2.setRowSorter(sortFR);
+			textArea_3.setText("");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	protected void UpdateTableInform()
 	{
 		try {
@@ -1141,6 +1315,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textField_10.setText("");
 		textField_11.setText("");
 		textField_12.setText("");
+		textField_14.setText("");
+		textField_15.setText("");
 	}
 	protected void Filt()
 	{
