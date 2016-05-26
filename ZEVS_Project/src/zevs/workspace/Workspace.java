@@ -90,6 +90,7 @@ public class Workspace extends ConnectionDB {
 	private JComboBox comboBox;
 	private String varId = null;
 	private String LoginU = null;
+	private String nameTextData = null;
 	private JButton button_2;
 	private TableRowSorter sort;
 	private TableRowSorter sortInfrom;
@@ -433,13 +434,14 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			panel.add(scrollPane_1, "cell 0 1 2 1,grow");
 			
 			try {
-				sortInfrom = new TableRowSorter(getInformationTextData(connectionUser));
-				table_1 = new JTable(getInformationTextData(connectionUser));
+				sortInfrom = new TableRowSorter(getInformationTextData(connectionAdmin));
+				table_1 = new JTable(getInformationTextData(connectionAdmin));
 				table_1.setRowSorter(sortInfrom);
 				table_1.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent arg0) {
 				    int Row = table_1.getRowSorter().convertRowIndexToModel(table_1.getSelectedRow());
 				    varId = table_1.getModel().getValueAt(Row, 0).toString();
+				    nameTextData = table_1.getModel().getValueAt(Row, 1).toString();
 				      textField_11.setText(table_1.getModel().getValueAt(Row, 0).toString());
 					  textField_12.setText(table_1.getModel().getValueAt(Row, 1).toString());
 					  textArea_2.setText(table_1.getModel().getValueAt(Row, 2).toString());
@@ -485,23 +487,43 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					else
 					if(id.isEmpty())
 					{
-					InsertTextData(connectionAdmin, null, checkApostrophe(name), checkApostrophe(text), 0);
-					JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
-					clearTextField();
-					UpdateTableInform();
-					button_3.setEnabled(false);
-					return;
+						try {
+							if (chekInformationTextData(connectionAdmin, name) == false)
+							{
+                InsertTextData(connectionAdmin, null, checkApostrophe(name), checkApostrophe(text), 0);
+                JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+                clearTextField();
+                UpdateTableInform();
+                button_3.setEnabled(false);
+                return;
+							}
+							else {
+								JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 					} else
 						try {
 							if(checkInputText(id, 0) == true)
 							{
 							if(chekInformationDataID(connectionAdmin, id) == false)
                                {
+								if (chekInformationTextData(connectionAdmin, name) == false)
+								{
                             InsertTextData(connectionAdmin, id, checkApostrophe(name), checkApostrophe(text), 1);
                             JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             clearTextField();
                             UpdateTableInform();
                             button_3.setEnabled(false);
+								}
+								else {
+									JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+									return;
+								}
                                }
                          else {
                         	 JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -529,8 +551,67 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					String idTextdata = textField_11.getText();
 					String Name = checkApostrophe(textField_12.getText());
 					String Text = checkApostrophe(textArea_2.getText());
-					
-					UpdateTextData(connectionAdmin, idTextdata, Name, Text, varId);
+					if(Text.isEmpty())
+					{
+						JOptionPane.showMessageDialog(button,"Имеются незаполненные поля.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						return;
+					} 
+					else
+						try {
+							if(idTextdata.isEmpty() == false && Name.isEmpty() == false)
+							if(chekInformationDataID(connectionAdmin, idTextdata) == false)
+							{
+							if(chekInformationTextData(connectionAdmin, Name) == false)
+							{
+                           UpdateTextDATA(button_3,idTextdata, Name, Text);
+                           return;
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+	              	              return;
+							}
+							}
+                       else {
+							JOptionPane.showMessageDialog(button, "Введенный idTextdata занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+              	              return;
+                              }
+							if(idTextdata.isEmpty() == false)
+							{
+								if(chekInformationDataID(connectionAdmin, idTextdata) == false)
+								{
+									 UpdateTextDATA(button_3,idTextdata, nameTextData, Text);
+								}
+								else {
+									JOptionPane.showMessageDialog(button, "Введенный idTextdata занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		              	              return;
+								}
+							}
+							else
+								if(Name.isEmpty() == false)
+								{
+									if(chekInformationTextData(connectionAdmin, Name) == false)
+									{
+		                           UpdateTextDATA(button_3,varId, Name, Text);
+									}
+									else
+									{
+										JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+			              	              return;
+									}
+								}
+							else
+								if(idTextdata.isEmpty() && Name.isEmpty())
+								{
+									  UpdateTextDATA(button_3,varId, nameTextData, Text);
+								}
+								
+							
+						} catch (HeadlessException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 				}
 			});
 			button_3.setEnabled(false);
@@ -781,6 +862,15 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(button_2, "cell 9 6,alignx right");
 		
 	}
+	protected void UpdateTextDATA(JButton button, String id,String Name, String Text)
+	{
+		UpdateTextData(connectionAdmin, id, Name, Text, varId);
+        UpdateTableInform();
+        clearTextField();
+		JOptionPane.showMessageDialog(button, "Данные  успешно изменены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
+		button_3.setEnabled(false);
+		return;
+	}
 	protected void CheckUpdateUserInputData(JButton button)
 	{
 		try {
@@ -910,8 +1000,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void UpdateTableInform()
 	{
 		try {
-			sortInfrom = new TableRowSorter(getInformationTextData(connectionUser));
-			table_1.setModel(getInformationTextData(connectionUser));
+			sortInfrom = new TableRowSorter(getInformationTextData(connectionAdmin));
+			table_1.setModel(getInformationTextData(connectionAdmin));
 			table_1.setRowSorter(sortInfrom);
 			textArea_2.setText("");
 		} catch (SQLException e) {
@@ -921,8 +1011,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected void UpdateTable()
 	{
 		try {
-			sort = new TableRowSorter(getUserData(connectionUser));
-			table.setModel(getUserData(connectionUser));
+			sort = new TableRowSorter(getUserData(connectionAdmin));
+			table.setModel(getUserData(connectionAdmin));
 			table.setRowSorter(sort);			
 		} 
 		catch (SQLException e) {

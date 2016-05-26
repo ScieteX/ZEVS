@@ -21,7 +21,7 @@ public class ConnectionDB extends CheckData
 	{
 		String query = null;
 		try {
-	query = "UPDATE `zevsdb`.`textdata` SET `idTextdata`='"+idTextdata+"', `Name`='"+Name+"', `Text`='"+Text+"', `Name`='"+Name+"' WHERE `idUser`='"+varID+"'";
+	query = "UPDATE `zevsdb`.`textdata` SET `idTextdata`='"+idTextdata+"', `Name`='"+Name+"', `Text`='"+Text+"', `Name`='"+Name+"' WHERE `idTextdata`='"+varID+"'";
 	PreparedStatement Update = connection.prepareStatement(query);
 	Update.executeUpdate();
 		} catch (SQLException e) {
@@ -265,6 +265,23 @@ public class ConnectionDB extends CheckData
 		while(Rset.next())
 		{
 			if(Rset.getString("idTextdata") != null)
+			{
+				result = true;
+			}
+			else
+				result = false;
+		}
+		return result;
+	}
+	protected boolean chekInformationTextData(Connection connection, String Name) throws SQLException
+	{
+		boolean result = false;
+		String query = "SELECT `Name` FROM zevsdb.textdata WHERE `Name` = '"+Name+"'";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		ResultSet Rset = preparedStatement.executeQuery();
+		while(Rset.next())
+		{
+			if(Rset.getString("Name") != null)
 			{
 				result = true;
 			}
