@@ -232,6 +232,23 @@ public class ConnectionDB extends CheckData
 	}
 	return  defaultTableModel;
 	}
+	protected TableModel getJessTableData(Connection connection) throws SQLException
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idJess","Name","JessCode"},0){
+		private static final long serialVersionUID = 1L;
+		 public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		
+	};
+	String query = "SELECT * FROM zevsdb.jessdata";
+	PreparedStatement preparedStatement = connection.prepareStatement(query);
+	ResultSet result = preparedStatement.executeQuery();
+	while(result.next())
+	{
+		defaultTableModel.addRow(new Object[]{result.getString("idJess"),result.getString("Name"),result.getString("JessCode")});
+	}
+	return  defaultTableModel;
+	}
 	
 	protected void InsertTextData(Connection connection, String idTextdata, String Name, String Text, int var)
 	{

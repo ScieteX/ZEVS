@@ -94,8 +94,10 @@ public class Workspace extends ConnectionDB {
 	private JButton button_2;
 	private TableRowSorter sort;
 	private TableRowSorter sortInfrom;
+	private TableRowSorter sortFR;
 	private JTextArea textArea_2;
 	private JButton button_3;
+	private JButton button_1;
 		/**
 		 * @wbp.parser.entryPoint
 		 */
@@ -368,8 +370,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
 	//	UserInternalFrame();
-		InformationInternalFrame();
-	//	FactsRulesInternalFrame();
+	//InformationInternalFrame();
+		FactsRulesInternalFrame();
 		frame.setVisible(true);
 		runJessCode.start();
 		System.out.println(Thread.currentThread().getId());
@@ -377,6 +379,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		protected void FactsRulesInternalFrame()
 		{
 			JInternalFrame internalFrame_2 = new JInternalFrame("\u0424\u0430\u043A\u0442\u044B/\u041F\u0440\u0430\u0432\u0438\u043B\u0430");
+			//internalFrame_2.setMaximum(true);
 			internalFrame_2.setClosable(true);
 			internalFrame_2.setIconifiable(true);
 			internalFrame_2.setMaximizable(true);
@@ -384,6 +387,98 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			internalFrame_2.setBounds(0, 69, 319, 33);
 			internalFrame_2.setVisible(true);
 			desktopPane.add(internalFrame_2);
+			internalFrame_2.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
+			
+			JSplitPane splitPane = new JSplitPane();
+			splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+			internalFrame_2.getContentPane().add(splitPane, "cell 0 0,grow");
+			
+			JPanel panel = new JPanel();
+			splitPane.setLeftComponent(panel);
+			panel.setLayout(new MigLayout("", "[][grow]", "[][259.00,grow]"));
+			
+			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+			panel.add(label, "cell 0 0,alignx trailing");
+			
+			textField_13 = new JTextField();
+			panel.add(textField_13, "cell 1 0,growx");
+			textField_13.setColumns(10);
+			textField_13.getDocument().addDocumentListener(new DocumentListener() {
+				
+				public void removeUpdate(DocumentEvent arg0) {
+					
+				}
+				
+				public void insertUpdate(DocumentEvent arg0) {
+					
+				}
+				
+				public void changedUpdate(DocumentEvent arg0) {
+					
+				}
+			});
+			JScrollPane scrollPane = new JScrollPane();
+			panel.add(scrollPane, "cell 0 1 2 1,grow");
+			try {
+				sortFR = new TableRowSorter(getJessTableData(connectionAdmin));
+			table_2 = new JTable(getJessTableData(connectionAdmin));
+			table_2.setRowSorter(sortFR);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	
+			table_2.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent arg0) {
+					
+				}
+			});
+			scrollPane.setViewportView(table_2);
+			
+			JPanel panel_1 = new JPanel();
+			splitPane.setRightComponent(panel_1);
+			panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
+			
+			JLabel lblNewLabel_5 = new JLabel("idJess:");
+			panel_1.add(lblNewLabel_5, "flowx,cell 0 0");
+			
+			JLabel lblNewLabel_6 = new JLabel("Name:");
+			panel_1.add(lblNewLabel_6, "flowx,cell 1 0");
+			
+			textField_15 = new JTextField();
+			panel_1.add(textField_15, "cell 1 0,growx");
+			textField_15.setColumns(10);
+			
+			JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			panel_1.add(button, "cell 2 0");
+			
+			button_1 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
+			button_1.setEnabled(false);
+			button_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			panel_1.add(button_1, "cell 3 0");
+			
+			JButton button_4 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
+			button_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			panel_1.add(button_4, "cell 4 0");
+			
+			JLabel lblNewLabel_7 = new JLabel("JessCode:");
+			panel_1.add(lblNewLabel_7, "cell 0 1");
+			
+			JTextArea textArea_3 = new JTextArea();
+			panel_1.add(textArea_3, "cell 0 2 5 1,grow");
+			
+			textField_14 = new JTextField();
+			panel_1.add(textField_14, "cell 0 0,growx");
+			textField_14.setColumns(10);
 			
 		}
 		protected void InformationInternalFrame()
@@ -1055,6 +1150,18 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		button_3.setEnabled(false);
 		
 	}
+	protected void FiltFR()
+	{
+		RowFilter  rowFilter = null;
+		try {
+		rowFilter = RowFilter.regexFilter(textField_13.getText(), new int[]{});
+		} catch (java.util.regex.PatternSyntaxException e) {
+			return;
+		}
+		sortFR.setRowFilter(rowFilter);
+		button_1.setEnabled(false);
+		
+	}
 		
 	public void removeTab (int type)
 	{
@@ -1109,6 +1216,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	private JTable table_1;
 	private JTextField textField_11;
 	private JTextField textField_12;
+	private JTextField textField_13;
+	private JTable table_2;
+	private JTextField textField_14;
+	private JTextField textField_15;
 
 	public void killThread()
 	{
