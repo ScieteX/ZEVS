@@ -159,7 +159,7 @@ public class Workspace extends ConnectionDB {
 		});
 		panel.add(btnNewButton, "cell 0 0");
 		JButton btnNewButton_1 = new JButton(">>>");
-		btnNewButton_1.setToolTipText("\u041D\u0430\u0439\u0442\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0435.");
+		btnNewButton_1.setToolTipText("\u041D\u0430\u0439\u0442\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0435");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
