@@ -96,7 +96,7 @@ public class Authorization extends ConnectionDB {
 		
 		JButton button_2 = new JButton("\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F");
 		button_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) {
 				Registration dialog = new Registration();
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);

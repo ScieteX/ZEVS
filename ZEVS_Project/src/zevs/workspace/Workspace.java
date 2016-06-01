@@ -255,6 +255,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				reader.appendText(textField_1.getText() + "\n");
+				textField_1.setText("");
 			}
 		});
 		panel_1.add(textField_1, "cell 0 2 3 1,growx");
