@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
 
 public class Authorization extends ConnectionDB {
 
@@ -52,7 +53,7 @@ public class Authorization extends ConnectionDB {
 		JButton button = new JButton("\u0413\u043E\u0441\u0442\u044C");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				startWorkspace(0);
+				startWorkspace(0,"Пользователь: Гость.");
 			}
 		});
 		button.setBounds(199, 117, 89, 23);
@@ -62,22 +63,22 @@ public class Authorization extends ConnectionDB {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String result = checkLoginPass(getConnection(login, pass), textField.getText(),true, true);
+					Connection connection = getConnection(login, pass);
+					String result = checkLoginPass(connection, textField.getText(),true, true);
 					if(result == null)
 					{
 				JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);
 						
 						return;
 					}
-					
 					if(result.equals(textField.getText() + passwordField.getText() + "user"))
 					{
-					startWorkspace(1);
+					startWorkspace(1,"Пользователь: "+getNameSurnamePat(connection, textField.getText()));
 					}
 					else					
 					if(result.equals(textField.getText() + passwordField.getText() + "admin"))
 					{
-					startWorkspace(3);
+					startWorkspace(3,"Пользователь: "+getNameSurnamePat(connection, textField.getText()));
 					return;
 					}
 					else
@@ -124,9 +125,10 @@ public class Authorization extends ConnectionDB {
 		frame.getContentPane().add(button_3);
 		frame.setVisible(true);
 	}
-	protected void startWorkspace(final int number)
+	protected void startWorkspace(final int number, String user)
 	{
 		Workspace window = new Workspace();
+		        window.title = user;
 		        window.initialize();
 				window.removeTab(number);
 		frame.dispose();

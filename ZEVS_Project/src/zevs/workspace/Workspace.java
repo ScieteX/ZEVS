@@ -51,7 +51,8 @@ import java.awt.event.MouseEvent;
 
 public class Workspace extends ConnectionDB {
 
-	public JFrame frame;
+	public JFrame frmZevs;
+	public  String title = "";
     public 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private JTextField textField;
 	private Connection connectionUser;
@@ -109,12 +110,13 @@ public class Workspace extends ConnectionDB {
 			e.printStackTrace();
 		}
 		highlighter = new DefaultHighlighter();
-		frame = new JFrame();
-		frame.setBounds(100, 100, 855, 639);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
+		frmZevs = new JFrame();
+		frmZevs.setTitle("ZEVS. " + title);
+		frmZevs.setBounds(100, 100, 855, 639);
+		frmZevs.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmZevs.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
-		frame.getContentPane().add(tabbedPane);
+		frmZevs.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Поиск данных", null, panel, null);
@@ -362,7 +364,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		internalFrame.setVisible(true);
 		rete.addOutputRouter("t", jTextAreaWriter);
 		rete.addInputRouter("t", reader, true);
-		frame.setVisible(true);
+		frmZevs.setVisible(true);
 		runJessCode.start();
 	}
 		protected void FactsRulesInternalFrame()

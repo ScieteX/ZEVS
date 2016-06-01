@@ -415,4 +415,16 @@ public class ConnectionDB extends CheckData
 				
 		return answer;
     }
+    protected String getNameSurnamePat(Connection connection, String Login) throws SQLException
+	{ 
+    String res = "";
+	String query = "SELECT Name,Surname, Patronymic FROM zevsdb.users WHERE Login = '"+Login+"'";
+	PreparedStatement preparedStatement = connection.prepareStatement(query);
+	ResultSet result = preparedStatement.executeQuery();
+	while(result.next())
+	{
+	 res = result.getString("Surname")+" "+ result.getString("Name")+" "+ result.getString("Patronymic");		            
+	}
+	return  res;
+}
 }
