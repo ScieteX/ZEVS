@@ -63,7 +63,6 @@ public class Authorization extends ConnectionDB {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					String result = checkLoginPass(getConnection(login, pass), textField.getText(),true, true);
-					System.out.println(result);
 					if(result == null)
 					{
 				JOptionPane.showMessageDialog(frame,"Неправильный логин или пароль!","Ошибка",JOptionPane.ERROR_MESSAGE);

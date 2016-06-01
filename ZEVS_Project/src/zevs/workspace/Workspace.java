@@ -212,7 +212,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			public void stateChanged(ChangeEvent arg0) {
 				sizeFont = Integer.parseInt(spinner.getValue().toString());
 				textArea_1.setFont(new Font(textArea_1.getFont().getFontName(), Font.PLAIN, sizeFont));
-				System.out.println(sizeFont);
 			}
 		});
 		spinner.setToolTipText("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430");
@@ -243,23 +242,13 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_1.add(scrollPane_1, "cell 0 1 3 1,grow");
 		textArea_1 = new JTextArea();
+		textArea_1.setEditable(false);
 		textArea_1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		scrollPane_1.setViewportView(textArea_1);
 		jTextAreaWriter = new JTextAreaWriter(textArea_1);
 		textField_1 = new JTextField();
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(textField_1.getText().equals("XXX"))
-				{
-						killThread();
-						try {
-							rete.eval("");
-						} catch (JessException e) {
-							e.printStackTrace();
-						}
-					System.out.println(textField_1.getText());
-				}
-				else
 				reader.appendText(textField_1.getText() + "\n");
 			}
 		});
@@ -372,7 +361,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addInputRouter("t", reader, true);
 		frame.setVisible(true);
 		runJessCode.start();
-		System.out.println(Thread.currentThread().getId());
 	}
 		protected void FactsRulesInternalFrame()
 		{
@@ -653,7 +641,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		protected void InformationInternalFrame()
 		{
 			JInternalFrame internalFrame_1 = new JInternalFrame("\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F");
-			//internalFrame_1.setMaximum(true);
 			internalFrame_1.setClosable(true);
 			internalFrame_1.setIconifiable(true);
 			internalFrame_1.setMaximizable(true);
@@ -1369,7 +1356,6 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 	protected Thread runJessCode = new Thread(new Runnable() {
 		public void run() {
 			isRun = true;
-			//System.out.println(runJessCode.currentThread().getId());
 			while(true)
 			{
 				try {
@@ -1387,11 +1373,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				if(activJess == true)
 				{
 					try {
-						System.out.println("AKTIV");
 					rete.run();
 					rete.eval("(clear)");
 					activJess = false;
-					System.out.println("STOP");
 					} catch (JessException e) {
 						e.printStackTrace();
 					}
@@ -1495,14 +1479,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN);
         textArea.getHighlighter().addHighlight(start, end, painter);
 		textArea.setCaretPosition(start);
-		System.out.println(step);
 	    }
 		else
 			if(numb < 0 || numb > startText.size())
 		{
 			step = 0;
 			step(step);
-			//search(Color.YELLOW);
 		}
 	}
 	}
