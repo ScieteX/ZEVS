@@ -146,6 +146,7 @@ public class Workspace extends ConnectionDB {
 		scrollPane.setViewportView(textArea);
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		JButton btnNewButton = new JButton("<<<");
+		btnNewButton.setToolTipText("\u041D\u0430\u0439\u0442\u0438 \u043F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0435");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				step --;
@@ -158,6 +159,7 @@ public class Workspace extends ConnectionDB {
 		});
 		panel.add(btnNewButton, "cell 0 0");
 		JButton btnNewButton_1 = new JButton(">>>");
+		btnNewButton_1.setToolTipText("\u041D\u0430\u0439\u0442\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0435.");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -247,6 +249,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		scrollPane_1.setViewportView(textArea_1);
 		jTextAreaWriter = new JTextAreaWriter(textArea_1);
 		textField_1 = new JTextField();
+		textField_1.setToolTipText("\u041F\u043E\u043B\u0435 \u0434\u043B\u044F \u0432\u0432\u043E\u0434\u0430 \u043E\u0442\u0432\u0435\u0442\u0430.");
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				reader.appendText(textField_1.getText() + "\n");
@@ -625,22 +628,35 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					panel_1.add(button_4, "cell 4 0");
 					
 					JLabel lblNewLabel_7 = new JLabel("JessCode:");
-					panel_1.add(lblNewLabel_7, "cell 0 1");
+					panel_1.add(lblNewLabel_7, "flowx,cell 0 1");
 				    
 				    JScrollPane scrollPane_2 = new JScrollPane();
 				    panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
 					
 				    textArea_3 = new JTextArea();
+				    textArea_3.setFont(new Font("Monospaced", Font.PLAIN, 14));
 				    scrollPane_2.setViewportView(textArea_3);
 					
 					textField_14 = new JTextField();
 					panel_1.add(textField_14, "cell 0 0,growx");
 					textField_14.setColumns(10);
+					
+				final	JSpinner spinner = new JSpinner();
+					spinner.addChangeListener(new ChangeListener() {
+						public void stateChanged(ChangeEvent arg0) {
+							int fontsize = Integer.parseInt(spinner.getValue().toString());
+							textArea_3.setFont(new Font("Monospaced", Font.PLAIN, fontsize));
+						}
+					});
+					spinner.setModel(new SpinnerNumberModel(new Integer(14), new Integer(0), null, new Integer(1)));
+					spinner.setToolTipText("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430.");
+					panel_1.add(spinner, "cell 0 1,growx");
 			
 		}
 		protected void InformationInternalFrame()
 		{
 			JInternalFrame internalFrame_1 = new JInternalFrame("\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F");
+			//internalFrame_1.setMaximum(true);
 			internalFrame_1.setClosable(true);
 			internalFrame_1.setIconifiable(true);
 			internalFrame_1.setMaximizable(true);
@@ -708,20 +724,20 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			
 			JPanel panel_1 = new JPanel();
 			splitPane.setRightComponent(panel_1);
-			panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
+			panel_1.setLayout(new MigLayout("", "[][][grow][][][]", "[][][grow]"));
 			
 			JLabel lblNewLabel_2 = new JLabel("idTextdata:");
 			panel_1.add(lblNewLabel_2, "cell 0 0,alignx trailing");
 			
 			textField_11 = new JTextField();
-			panel_1.add(textField_11, "flowx,cell 1 0,alignx left");
+			panel_1.add(textField_11, "cell 1 0,alignx left");
 			textField_11.setColumns(10);
 			
 			JLabel lblNewLabel_3 = new JLabel("Name:");
-			panel_1.add(lblNewLabel_3, "cell 1 0");
+			panel_1.add(lblNewLabel_3, "flowx,cell 2 0");
 			
 			textField_12 = new JTextField();
-			panel_1.add(textField_12, "cell 1 0,growx");
+			panel_1.add(textField_12, "cell 2 0,growx");
 			textField_12.setColumns(10);
 			
 			final JButton button = new JButton("\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C");
@@ -794,7 +810,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 						}
 				}
 			});
-			panel_1.add(button, "cell 2 0");
+			panel_1.add(button, "cell 3 0");
 			
 			button_3 = new JButton("\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C");
 			button_3.addActionListener(new ActionListener() {
@@ -866,7 +882,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				}
 			});
 			button_3.setEnabled(false);
-			panel_1.add(button_3, "cell 3 0");
+			panel_1.add(button_3, "cell 4 0");
 			
 			final JButton button_1 = new JButton("\u0423\u0434\u0430\u043B\u0438\u0442\u044C");
 			button_1.addActionListener(new ActionListener() {
@@ -905,15 +921,28 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 						return;
 				}
 			});
-			panel_1.add(button_1, "cell 4 0");
+			panel_1.add(button_1, "cell 5 0");
 			
 			JLabel lblNewLabel_4 = new JLabel("Text:");
-			panel_1.add(lblNewLabel_4, "cell 0 1");
+			panel_1.add(lblNewLabel_4, "flowx,cell 0 1,alignx left");
+			
+			final JSpinner spinner = new JSpinner();
+			spinner.setToolTipText("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430.");
+			spinner.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					int fontsize = Integer.parseInt(spinner.getValue().toString());
+					textArea_2.setFont(new Font("Monospaced", Font.PLAIN, fontsize));
+					
+				}
+			});
+			spinner.setModel(new SpinnerNumberModel(new Integer(14), new Integer(0), null, new Integer(1)));
+			panel_1.add(spinner, "cell 1 1,growx");
 			
 			JScrollPane scrollPane_2 = new JScrollPane();
-			panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
+			panel_1.add(scrollPane_2, "cell 0 2 6 1,grow");
 			
 			textArea_2 = new JTextArea();
+			textArea_2.setFont(new Font("Monospaced", Font.PLAIN, 14));
 			scrollPane_2.setViewportView(textArea_2);
 		}
 	protected void UserInternalFrame()
