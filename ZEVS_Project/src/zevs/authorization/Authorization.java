@@ -23,6 +23,7 @@ public class Authorization extends ConnectionDB {
 	public JFrame frame;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private Connection connection;
 	
 	
 	public void initialize() {
@@ -32,7 +33,6 @@ public class Authorization extends ConnectionDB {
 		frame.setBounds(100, 100, 438, 222);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
 		textField = new JTextField();
 		textField.setBounds(10, 30, 414, 20);
 		frame.getContentPane().add(textField);
@@ -58,12 +58,15 @@ public class Authorization extends ConnectionDB {
 		});
 		button.setBounds(199, 117, 89, 23);
 		frame.getContentPane().add(button);
-		
+		try {
+			connection = getConnection(login, pass);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		JButton button_1 = new JButton("\u0412\u0445\u043E\u0434");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					Connection connection = getConnection(login, pass);
 					String result = checkLoginPass(connection, textField.getText(),true, true);
 					if(result == null)
 					{
