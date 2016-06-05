@@ -1,10 +1,5 @@
 package zevs;
-
-import java.awt.Color;
 import java.util.regex.Matcher;
-
-import javax.swing.text.DefaultHighlighter;
-
 public class CheckData {
 	public boolean checkInputText(String text, int type)
 	{

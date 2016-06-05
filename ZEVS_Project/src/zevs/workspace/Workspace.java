@@ -7,6 +7,7 @@ import zevs.ConnectionDB;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
+import java.awt.TextArea;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
@@ -61,6 +62,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.UIManager;
 
 public class Workspace extends ConnectionDB {
@@ -134,12 +136,12 @@ public class Workspace extends ConnectionDB {
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Поиск данных по электробезопасности", null, panel, null);
-		panel.setLayout(new MigLayout("", "[509.00][155.00][128.00,grow]", "[34.00px][grow][]"));
+		panel.setLayout(new MigLayout("", "[509.00,grow][155.00][128.00,grow]", "[34.00px][grow][]"));
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "\u0412\u0432\u043E\u0434 \u0434\u0430\u043D\u043D\u044B\u0445 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.add(panel_3, "cell 0 0,growx,aligny center");
-		panel_3.setLayout(new MigLayout("", "[][384.00,grow]", "[][]"));
+		panel_3.setLayout(new MigLayout("", "[][384.00,grow,fill]", "[][]"));
 		
 		textField = new JTextField();
 		panel_3.add(textField, "cell 0 1 2 1,growx");
@@ -277,6 +279,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 								setJessCode((String)comboBox_1.getSelectedItem());
 								isRun = true;
 							activJess = true;
+							comboBox_1.setEnabled(false);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -352,7 +355,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		desktopPane.setBackground(Color.WHITE);
 		panel_2.add(desktopPane, "cell 0 1 2 1,grow");
 		final JInternalFrame internalFrame = new JInternalFrame("\u0420\u0435\u0436\u0438\u043C \u0410\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u0430");
-		internalFrame.setBounds(10, 61, 424, 166);
+		internalFrame.setBounds(155, 116, 424, 166);
 		desktopPane.add(internalFrame);
 		internalFrame.getContentPane().setLayout(new MigLayout("", "[][408px,grow]", "[14px][][][][]"));
 		
@@ -431,6 +434,9 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		rete.addInputRouter("t", reader, true);
 		frmZevs.setVisible(true);
 		runJessCode.start();
+		//InformationInternalFrame();
+		//FactsRulesInternalFrame();
+		//UserInternalFrame();
 	}
 		protected void FactsRulesInternalFrame()
 		{
@@ -455,7 +461,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			splitPane.setLeftComponent(panel);
 			panel.setLayout(new MigLayout("", "[][grow]", "[][259.00,grow]"));
 			
-			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440\u0430\u0446\u0438\u044F \u0442\u0430\u0431\u043B\u0438\u0446\u044B:");
 			panel.add(label, "cell 0 0,alignx trailing");
 			
 			textField_13 = new JTextField();
@@ -503,10 +509,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					splitPane.setRightComponent(panel_1);
 					panel_1.setLayout(new MigLayout("", "[][grow][][][]", "[][][grow]"));
 					
-					JLabel lblNewLabel_5 = new JLabel("idJess:");
+					JLabel lblNewLabel_5 = new JLabel("\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u042D\u0421:");
 					panel_1.add(lblNewLabel_5, "flowx,cell 0 0");
 					
-					JLabel lblNewLabel_6 = new JLabel("Name:");
+					JLabel lblNewLabel_6 = new JLabel("\u041D\u0430\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u043D\u0438\u0435 \u042D\u0421:");
 					panel_1.add(lblNewLabel_6, "flowx,cell 1 0");
 					
 					textField_15 = new JTextField();
@@ -521,7 +527,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							String jessCode = textArea_3.getText();
 							if(name.isEmpty() || jessCode.isEmpty())
 							{
-								JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idJess может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Строка Идентификатор ЭС может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
 							return;
 							}
 							else
@@ -538,7 +544,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		                return;
 									}
 									else {
-										JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(button,"Введённое Наименование ЭС уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
 										return;
 									}
 								} catch (HeadlessException e) {
@@ -561,18 +567,18 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		                            button_1.setEnabled(false);
 										}
 										else {
-											JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+											JOptionPane.showMessageDialog(button,"Введёное Наименование ЭС уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
 											return;
 										}
 		                               }
 		                         else {
-		                        	 JOptionPane.showMessageDialog(button, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+		                        	 JOptionPane.showMessageDialog(button, "Введённый Идентификатор ЭС занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 		                        	 return;
 		                          }
 									}
 									else
 									{
-										JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idJess может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Строка Идентификатор ЭС может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
 										return;
 									}
 										
@@ -609,12 +615,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 									}
 									else
 									{
-										JOptionPane.showMessageDialog(button_1, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(button_1, "Введённое Наименование ЭС уже занято!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 			              	              return;
 									}
 									}
 		                       else {
-									JOptionPane.showMessageDialog(button_1, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+									JOptionPane.showMessageDialog(button_1, "Введённый Идентификатор ЭС занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 		              	              return;
 		                              }
 									if(idTextdata.isEmpty() == false)
@@ -624,7 +630,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 											 UpdateJessDATA(button_3,idTextdata, nameTextData, jessCode);
 										}
 										else {
-											JOptionPane.showMessageDialog(button, "Введенный idJess занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+											JOptionPane.showMessageDialog(button, "Введённый Идентификатор ЭС занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 				              	              return;
 										}
 									}
@@ -637,7 +643,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 											}
 											else
 											{
-												JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+												JOptionPane.showMessageDialog(button, "Введённое Наименование ЭС занято!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 					              	              return;
 											}
 										}
@@ -660,7 +666,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 						public void actionPerformed(ActionEvent arg0) {
 							String text = textField_14.getText();
 							int ans;
-							ans = JOptionPane.showConfirmDialog(button_4, "Вы уверены что хотите удалить запись с idJess = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+							ans = JOptionPane.showConfirmDialog(button_4, "Вы уверены что хотите удалить запись с Идентификатором ЭС = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
 							if(ans == JOptionPane.YES_OPTION)
 							{
 							if(checkInputText(text, 0) == true)
@@ -676,7 +682,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 									}
 									else
 									{
-										JOptionPane.showMessageDialog(button_4,"Данных с ввведенным idJess = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(button_4,"Данных с ввведённым Идентификатором ЭС = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
 									}
 								} catch (SQLException e) {
 									e.printStackTrace();
@@ -694,13 +700,14 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					});
 					panel_1.add(button_4, "cell 4 0");
 					
-					JLabel lblNewLabel_7 = new JLabel("JessCode:");
+					JLabel lblNewLabel_7 = new JLabel("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430:");
 					panel_1.add(lblNewLabel_7, "flowx,cell 0 1");
 				    
 				    JScrollPane scrollPane_2 = new JScrollPane();
 				    panel_1.add(scrollPane_2, "cell 0 2 5 1,grow");
 					
 				    textArea_3 = new JTextArea();
+				    textArea_3.setBorder(new TitledBorder("Исходный код экспертной системы"));
 				    textArea_3.setFont(new Font("Monospaced", Font.PLAIN, 14));
 				    scrollPane_2.setViewportView(textArea_3);
 					
@@ -744,7 +751,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			splitPane.setLeftComponent(panel);
 			panel.setLayout(new MigLayout("", "[][grow]", "[][154.00,grow]"));
 			
-			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+			JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440\u0430\u0446\u0438\u044F \u0442\u0430\u0431\u043B\u0438\u0446\u044B:");
 			panel.add(label, "cell 0 0,alignx trailing");
 			
 			textField_10 = new JTextField();
@@ -793,14 +800,14 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			splitPane.setRightComponent(panel_1);
 			panel_1.setLayout(new MigLayout("", "[][][grow][][][]", "[][][grow]"));
 			
-			JLabel lblNewLabel_2 = new JLabel("idTextdata:");
+			JLabel lblNewLabel_2 = new JLabel("\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0442\u0435\u043A\u0441\u0442\u0430:");
 			panel_1.add(lblNewLabel_2, "cell 0 0,alignx trailing");
 			
 			textField_11 = new JTextField();
 			panel_1.add(textField_11, "cell 1 0,alignx left");
 			textField_11.setColumns(10);
 			
-			JLabel lblNewLabel_3 = new JLabel("Name:");
+			JLabel lblNewLabel_3 = new JLabel("\u041D\u0430\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u043D\u0438\u0435 \u0442\u0435\u043A\u0441\u0442\u0430:");
 			panel_1.add(lblNewLabel_3, "flowx,cell 2 0");
 			
 			textField_12 = new JTextField();
@@ -815,7 +822,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					String text = textArea_2.getText();
 					if(name.isEmpty() || text.isEmpty())
 					{
-						JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idTextdata может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Строка Идентификатор текста может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 					else
@@ -825,14 +832,14 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							if (chekInformationTextData(connectionAdmin, name) == false)
 							{
                 InsertTextData(connectionAdmin, null, checkApostrophe(name), checkApostrophe(text), 0);
-                JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                 clearTextField();
                 UpdateTableInform();
+                JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                 button_3.setEnabled(false);
                 return;
 							}
 							else {
-								JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button,"Введённое Наименование текста занято","Ошибка",JOptionPane.ERROR_MESSAGE);
 								return;
 							}
 						} catch (HeadlessException e) {
@@ -849,24 +856,24 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 								if (chekInformationTextData(connectionAdmin, name) == false)
 								{
                             InsertTextData(connectionAdmin, id, checkApostrophe(name), checkApostrophe(text), 1);
-                            JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             clearTextField();
                             UpdateTableInform();
+                            JOptionPane.showMessageDialog(button, "Данные успешно добавлены.","Поздравляю", JOptionPane.INFORMATION_MESSAGE);
                             button_3.setEnabled(false);
 								}
 								else {
-									JOptionPane.showMessageDialog(button,"Поле Name уже занято","Ошибка",JOptionPane.ERROR_MESSAGE);
+									JOptionPane.showMessageDialog(button,"Введённое Наименование текста занято","Ошибка",JOptionPane.ERROR_MESSAGE);
 									return;
 								}
                                }
                          else {
-                        	 JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+                        	 JOptionPane.showMessageDialog(button, "Введённый Идентификатор текста занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
                         	 return;
                           }
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Строка Идентификатор текста может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
 								return;
 							}
 								
@@ -902,12 +909,12 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button, "Введённое Наименование текста уже занято!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 	              	              return;
 							}
 							}
                        else {
-							JOptionPane.showMessageDialog(button, "Введенный idTextdata занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(button, "Введённый Идентификатор текста занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
               	              return;
                               }
 							if(idTextdata.isEmpty() == false)
@@ -917,7 +924,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 									 UpdateTextDATA(button_3,idTextdata, nameTextData, Text);
 								}
 								else {
-									JOptionPane.showMessageDialog(button, "Введенный idTextdata занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+									JOptionPane.showMessageDialog(button, "Введённый Идентификатор текста занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 		              	              return;
 								}
 							}
@@ -930,7 +937,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 									}
 									else
 									{
-										JOptionPane.showMessageDialog(button, "Введенный Name занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(button, "Введённое Наименование текста занято!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 			              	              return;
 									}
 								}
@@ -956,7 +963,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				public void actionPerformed(ActionEvent arg0) {
 					String text = textField_11.getText();
 					int ans;
-					ans = JOptionPane.showConfirmDialog(button_1, "Вы уверены что хотите удалить запись с idTextdata = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+					ans = JOptionPane.showConfirmDialog(button_1, "Вы уверены что хотите удалить запись с Идентификатором текста = "+text+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
 					if(ans == JOptionPane.YES_OPTION)
 					{
 					if(checkInputText(text, 0) == true)
@@ -972,7 +979,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(button_1,"Данных с ввведенным idTextdata = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button_1,"Данных с введённым Идентификатором текста = "+text+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
@@ -990,8 +997,8 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			});
 			panel_1.add(button_1, "cell 5 0");
 			
-			JLabel lblNewLabel_4 = new JLabel("Text:");
-			panel_1.add(lblNewLabel_4, "flowx,cell 0 1,alignx left");
+			JLabel lblNewLabel_4 = new JLabel("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430:");
+			panel_1.add(lblNewLabel_4, "flowx,cell 0 1,alignx right");
 			
 			final JSpinner spinner = new JSpinner();
 			spinner.setToolTipText("\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430.");
@@ -1009,6 +1016,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			panel_1.add(scrollPane_2, "cell 0 2 6 1,grow");
 			
 			textArea_2 = new JTextArea();
+			textArea_2.setBorder(new TitledBorder("Текстовые данные"));
 			textArea_2.setFont(new Font("Monospaced", Font.PLAIN, 14));
 			scrollPane_2.setViewportView(textArea_2);
 		}
@@ -1036,7 +1044,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		splitPane.setLeftComponent(panel);
 		panel.setLayout(new MigLayout("", "[][261.00px,grow][74.00,right][67.00][]", "[20px][257.00,grow]"));
 		
-		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440:");
+		JLabel label = new JLabel("\u0424\u0438\u043B\u044C\u0442\u0440\u0430\u0446\u0438\u044F \u0442\u0430\u0431\u043B\u0438\u0446\u044B:");
 		panel.add(label, "cell 0 0,alignx trailing");
 		
 		textField_3 = new JTextField();
@@ -1092,10 +1100,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		splitPane.setRightComponent(panel_1);
 		panel_1.setLayout(new MigLayout("", "[319.00][][][][][grow][grow][][][]", "[][][][][][][]"));
 		
-		JLabel lblIduser = new JLabel("idUser:");
+		JLabel lblIduser = new JLabel("\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblIduser, "flowx,cell 0 0");
 		
-		JLabel lblName = new JLabel("Name:");
+		JLabel lblName = new JLabel("\u0418\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblName, "cell 1 0");
 		
 		textField_4 = new JTextField();
@@ -1106,10 +1114,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(textField_7, "cell 1 1 9 1,growx");
 		textField_7.setColumns(10);
 		
-		JLabel lblLogin = new JLabel("Login:");
+		JLabel lblLogin = new JLabel("\u041B\u043E\u0433\u0438\u043D \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblLogin, "cell 0 2");
 		
-		JLabel lblNewLabel = new JLabel("Surname:");
+		JLabel lblNewLabel = new JLabel("\u0424\u0430\u043C\u0438\u043B\u0438\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblNewLabel, "cell 1 2");
 		
 		textField_5 = new JTextField();
@@ -1120,10 +1128,10 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(textField_8, "cell 1 3 9 1,growx");
 		textField_8.setColumns(10);
 		
-		JLabel lblPassword = new JLabel("Password:");
+		JLabel lblPassword = new JLabel("\u041F\u0430\u0440\u043E\u043B\u044C \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblPassword, "cell 0 4");
 		
-		JLabel lblPatronymic = new JLabel("Patronymic:");
+		JLabel lblPatronymic = new JLabel("\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblPatronymic, "cell 1 4");
 		
 		textField_6 = new JTextField();
@@ -1134,7 +1142,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 		panel_1.add(textField_9, "cell 1 5 9 1,growx");
 		textField_9.setColumns(10);
 		
-		JLabel lblType = new JLabel("Type:");
+		JLabel lblType = new JLabel("\u0422\u0438\u043F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F:");
 		panel_1.add(lblType, "flowx,cell 0 6");
 		
 		comboBox = new JComboBox();
@@ -1148,16 +1156,16 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 				int ans;
 				if(id.isEmpty())
 				{
-					JOptionPane.showMessageDialog(button,"Поле idUser пустое.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(button,"Строка Идентификатор пользователя пустая.","Ошибка",JOptionPane.ERROR_MESSAGE);
 				return;
 				}
 				else
-				ans = JOptionPane.showConfirmDialog(button, "Вы уверены что хотите удалить пользователя с idUser = "+id+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
+				ans = JOptionPane.showConfirmDialog(button, "Вы уверены что хотите удалить пользователя с Идентификатором = "+id+"","Предупреждение!!!",JOptionPane.YES_NO_OPTION);
 				if(ans == JOptionPane.YES_OPTION)
 				{
 					if(checkInputText(id, 0) == false)
 					{
-						JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Строка Идентификатор пользователя может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
 						button_2.setEnabled(false);
 						return;
 					} else
@@ -1172,7 +1180,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(button,"Пользователя с ввведенным idUser = "+id+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(button,"Пользователя с введённым Идентификатором = "+id+", не существует.","Ошибка",JOptionPane.ERROR_MESSAGE);
 								button_2.setEnabled(false);
 								return;
 							}
@@ -1233,7 +1241,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			String text = textField_4.getText();
 			if(checkAllInputText("", "", textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), 2) == false)
 			{
-				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idUser может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\nСтрока Идентификатор пользователя  может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			else
@@ -1243,11 +1251,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					 return;
 				}
 				else
-					if(checkInputText(textField_5.getText()+textField_6.getText() , 1) == false)
+					if(checkInputText(textField_5.getText(), 1) == false && textField_5.getText().isEmpty() == false)
 					{
-						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\n Минимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\nМинимальны длина логина 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					else
+						if(checkInputText(textField_6.getText() , 1) == false)
+						{
+							JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\nМинимальны длина пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 			else 
 			if(chekUserID(connectionAdmin, text) == false)
 			{
@@ -1265,7 +1279,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			else
 				if(checkInputText(text, 0) == false)
 				{
-					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\nСтрока Идентификатор пользователя может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				else
@@ -1282,7 +1296,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					JOptionPane.showMessageDialog(button,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
 			}
 			else
-				JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(button, "Введённый Идентификатор пользователя занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (HeadlessException e) {
@@ -1297,7 +1311,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			String text = textField_4.getText();
 			if(checkAllInputText("", textField_5.getText(), textField_6.getText(), textField_7.getText(), textField_8.getText(),textField_9.getText(), 1) == false)
 			{
-				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Поле idUser может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(button,"Имеются незаполненные поля\n Строка Идентификатор пользователя может быть пустым.","Ошибка",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			else
@@ -1307,11 +1321,17 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					 return;
 				}
 				else
-					if(checkInputText(textField_5.getText()+textField_6.getText() , 1) == false)
+					if(checkInputText(textField_5.getText(), 1) == false)
 					{
-						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\n Минимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\nМинимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					else
+						if(checkInputText(textField_6.getText() , 1) == false)
+						{
+							JOptionPane.showMessageDialog(button,"Введены недопустимые символы, возможно кириллические буквы.\nМинимальны длина логина и пароля 3 символа, максимальная 30 символов.","Ошибка",JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 			else 
 			if(chekUserID(connectionAdmin, text) == false)
 			{
@@ -1328,7 +1348,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 			else
 				if(checkInputText(text, 0) == false)
 				{
-					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\n Поле idUser может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(button,"Введены недопустимые символы.\nСтрока Идентификатор пользователя может содержать только цифры.","Ошибка",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				else
@@ -1344,7 +1364,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					JOptionPane.showMessageDialog(button,"Логин занят","Ошибка",JOptionPane.ERROR_MESSAGE);
 			}
 			else
-				JOptionPane.showMessageDialog(button, "Введенный idUser занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(button, "Введённый Идентификатор пользователя занят!!!","Ошибка", JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (HeadlessException e) {
@@ -1472,6 +1492,7 @@ textArea_1.setFont(new Font((String) comboBox_3.getSelectedItem(), Font.PLAIN, s
 					rete.run();
 					rete.eval("(clear)");
 					activJess = false;
+					comboBox_1.setEnabled(true);
 					} catch (JessException e) {
 						e.printStackTrace();
 					}

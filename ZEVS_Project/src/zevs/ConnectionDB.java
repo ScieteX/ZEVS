@@ -174,7 +174,7 @@ public class ConnectionDB extends CheckData
 		return resultString;
 	}
 	protected TableModel getUserData(Connection connection) throws SQLException
-	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idUser","Login","Password","Name","Surname","Patronymic","Type"},0){
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"Идентификатор пользователя","Логин пользователя","Пароль пользователя","Имя пользователя","Фамилия пользователя","Отчество пользователя","Тип пользователя"},0){
 		private static final long serialVersionUID = 1L;
 		 public boolean isCellEditable(int row, int column) {
 		       return false;
@@ -249,7 +249,7 @@ public class ConnectionDB extends CheckData
 		return result;
 	}
 	protected TableModel getInformationTextData(Connection connection) throws SQLException
-	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idTextdata","Name","Text"},0){
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"Идентификатор текста","Наименование текста","Текстовые данные"},0){
 		private static final long serialVersionUID = 1L;
 		 public boolean isCellEditable(int row, int column) {
 		       return false;
@@ -266,7 +266,7 @@ public class ConnectionDB extends CheckData
 	return  defaultTableModel;
 	}
 	protected TableModel getJessTableData(Connection connection) throws SQLException
-	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"idJess","Name","JessCode"},0){
+	{ DefaultTableModel defaultTableModel = new DefaultTableModel(new String[] {"Идентификатор ЭС","Наименование ЭС","Исходный код ЭС"},0){
 		private static final long serialVersionUID = 1L;
 		 public boolean isCellEditable(int row, int column) {
 		       return false;
