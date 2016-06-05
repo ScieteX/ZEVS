@@ -129,18 +129,41 @@ public class Workspace extends ConnectionDB {
 		highlighter = new DefaultHighlighter();
 		frmZevs = new JFrame();
 		frmZevs.setTitle("ZEVS. " + title);
-		frmZevs.setBounds(100, 100, 868, 644);
+		frmZevs.setBounds(100, 100, 1064, 693);
 		frmZevs.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmZevs.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));		
 		frmZevs.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Поиск данных по электробезопасности", null, panel, null);
-		panel.setLayout(new MigLayout("", "[509.00,grow][155.00][128.00,grow]", "[34.00px][grow][]"));
+		panel.setLayout(new MigLayout("", "[509.00,grow][155.00][120.00,grow][128.00,grow]", "[][34.00px][grow][]"));
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u043F\u043E\u0438\u0441\u043A\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.add(panel_5, "cell 0 0 4 1,grow");
+		panel_5.setLayout(new MigLayout("", "[108.00,grow]", "[]"));
+		try {
+			comboBox_2 = new JComboBox(getAllTextName(connectionUser,0).toArray());
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		panel_5.add(comboBox_2, "cell 0 0,growx,aligny center");
+		comboBox_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					textArea.setText(getTextData(connectionUser, (String)comboBox_2.getSelectedItem()));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				textArea.setCaretPosition(0);
+			}
+		});
+		
+		comboBox_2.setToolTipText("\u0412\u044B\u0431\u043E\u0440 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438 \u043F\u043E\u0438\u0441\u043A\u0430");
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "\u0412\u0432\u043E\u0434 \u0434\u0430\u043D\u043D\u044B\u0445 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.add(panel_3, "cell 0 0,growx,aligny center");
+		panel.add(panel_3, "cell 0 1,growx,aligny center");
 		panel_3.setLayout(new MigLayout("", "[][384.00,grow,fill]", "[][]"));
 		
 		textField = new JTextField();
@@ -159,7 +182,7 @@ public class Workspace extends ConnectionDB {
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new TitledBorder(null, "\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u043F\u043E\u0438\u0441\u043A", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.add(panel_4, "cell 1 0,growx,aligny center");
+		panel.add(panel_4, "cell 1 1,growx,aligny center");
 		panel_4.setLayout(new MigLayout("", "[][12.00][][]", "[]"));
 		JButton btnNewButton = new JButton("<<<");
 		panel_4.add(btnNewButton, "cell 0 0,aligny center");
@@ -188,32 +211,42 @@ public class Workspace extends ConnectionDB {
 				}
 			}
 		});
-		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u043F\u043E\u0438\u0441\u043A\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.add(panel_5, "cell 2 0,grow");
-		panel_5.setLayout(new MigLayout("", "[108.00,grow]", "[]"));
 		try
 		{
-		comboBox_2 = new JComboBox(getAllTextName(connectionUser,0).toArray());
-		panel_5.add(comboBox_2, "cell 0 0,growx,aligny center");
-		comboBox_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					textArea.setText(getTextData(connectionUser, (String)comboBox_2.getSelectedItem()));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				textArea.setCaretPosition(0);
-			}
-		});
-		
-		comboBox_2.setToolTipText("\u0412\u044B\u0431\u043E\u0440 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438 \u043F\u043E\u0438\u0441\u043A\u0430");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		JPanel panel_11 = new JPanel();
+		panel_11.setBorder(new TitledBorder(null, "\u0422\u0438\u043F \u0448\u0440\u0438\u0444\u0442\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.add(panel_11, "cell 2 1,grow");
+		panel_11.setLayout(new MigLayout("", "[grow]", "[]"));
+		GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		final JComboBox comboBox_4 = new JComboBox(gEnvironment.getAvailableFontFamilyNames());
+		comboBox_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textArea.setFont(new Font((String) comboBox_4.getSelectedItem(), Font.PLAIN, sizeFont));
+			}
+		});
+		comboBox_4.setToolTipText("\u0422\u0438\u043F \u0448\u0440\u0438\u0444\u0442\u0430");
+		panel_11.add(comboBox_4, "cell 0 0,growx,aligny center");
+		
+		JPanel panel_12 = new JPanel();
+		panel_12.setBorder(new TitledBorder(null, "\u0420\u0430\u0437\u043C\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.add(panel_12, "cell 3 1,grow");
+		panel_12.setLayout(new MigLayout("", "[grow]", "[]"));
+		
+		final JSpinner spinner_1 = new JSpinner();
+		spinner_1.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				sizeFont = Integer.parseInt(spinner_1.getValue().toString());
+				textArea.setFont(new Font(textArea.getFont().getFontName(), Font.PLAIN, sizeFont));
+			}
+		});
+		spinner_1.setModel(new SpinnerNumberModel(new Integer(14), new Integer(0), null, new Integer(1)));
+		panel_12.add(spinner_1, "cell 0 0,growx");
 		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, "cell 0 1 3 1,grow");
+		panel.add(scrollPane, "cell 0 2 4 1,grow");
 		
 		textArea = new JTextArea();
 		textArea.setBorder(new TitledBorder("Результат поиска"));
@@ -224,7 +257,7 @@ public class Workspace extends ConnectionDB {
 		try {
 		
 		label_1 = new JLabel("\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435 \u0432\u0432\u043E\u0434\u0430...");
-		panel.add(label_1, "cell 0 2 3 1");
+		panel.add(label_1, "cell 0 3 4 1");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
